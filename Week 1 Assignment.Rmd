@@ -1,0 +1,86 @@
+---
+title: "Data 607 Assignment 1"
+author: "CHUN SHING LEUNG"
+date: "2023-09-02"
+output: html_document
+---
+
+## Library
+
+```{r cars}
+library(tidyverse)
+library(dplyr)
+
+```
+
+## Overview
+
+The Ultimate Halloween Candy Power Ranking was selected as my data for this assignment. The goal of this data is to figure out what Halloween candy people most prefer.The data was collected by letting 8,371 voters from different IP to vote on about 269,000 randomly generated matchups.
+
+
+The dataset was downloaded from the following link and uploaded to Github.
+
+https://fivethirtyeight.com/videos/the-ultimate-halloween-candy-power-ranking/
+
+
+
+```{r}
+# Downloading data from
+
+candy_data <- read.csv("https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/candy-data.csv")
+as.data.frame(candy_data)
+
+glimpse(candy_data)
+
+```
+
+
+```{r}
+# Creating a subset data frame that contain Candy's name and Percentage data.
+
+sub_candy <- candy_data %>% select(competitorname, sugarpercent, pricepercent, winpercent)
+
+head(sub_candy)
+
+```
+```{r}
+
+#rename the variables
+
+colnames(sub_candy) <- c("Competitor", "Sugar_percent", "Price_percent", "Win_percent")
+
+head(sub_candy)
+```
+
+```{r}
+
+#arrange the data by Win percentage
+#Recreating a plot to reflect each Brand win rate.
+
+desc_candy <- sub_candy %>%  arrange(desc(Win_percent))
+
+desc_candy
+```
+
+
+```{r}
+
+#Top 10 Candy
+
+desc_candy %>%
+  top_n(10, Win_percent) %>%
+  ggplot()+geom_bar(mapping=aes(x=reorder(Competitor, -Win_percent), y=Win_percent),stat = "identity")+
+  theme(axis.text.x=element_text(angle=90,hjust=1)) +
+  labs(
+    title = "Top 10 Candy",
+    x = "Candy", y = "Win Percentage",
+  )
+
+
+```
+
+## Conclusion
+
+The most popular Candy Brand is Reese's Candy. 
+I would like to make a bar chart to include all Candy Win percentage but the x-axis label overlapped and I couldn't figure a way to reslove it yet.
+
