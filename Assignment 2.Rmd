@@ -1,0 +1,36 @@
+---
+title: "Data 607 Week 2 Assignment"
+author: "CHUN SHING LEUNG"
+date: "2023-09-09"
+output: html_document
+---
+
+## Library
+
+```{r}
+library(RMySQL)
+library(DBI)
+
+```
+
+## Load th einformation from SQL database into an R dataframe
+
+Assignment – SQL and R
+Choose six recent popular movies. Ask at least five people that you know (friends, family, classmates, imaginary
+friends if necessary) to rate each of these movies that they have seen on a scale of 1 to 5. Take the results
+(observations) and store them in a SQL database of your choosing. Load the information from the SQL database
+into an R dataframe.
+
+The result can be accessed from my Github:
+https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/A2movierate.csv
+
+
+```{r}
+# Connect to MySQL and retrieve A2movierate dataset.
+
+mydb = dbConnect(MySQL(), user='root', password='1234test', dbname='mr', host='localhost')
+movie <- dbGetQuery(mydb, "select Name, movieId, rating from mr.A2movierate")
+summary(movie)
+head(movie)
+
+```
