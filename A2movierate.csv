@@ -1,0 +1,40 @@
+Name,movieId,year,rating
+Tony,Star Wars,1996,4.5
+Susan,The Shawshank Redemption,1997,3
+Peter,Trainspotting,1998,4
+Shirley,Star Wars,1996,5
+John,The Wrong Trousers,2000,2.5
+Sean,A Close Shave,2001,1
+Lilly,Star Trek: First Contact,2002,3
+Linna,Casablanca,2003,4
+Jason,Blade Runner,2004,5
+Joseph,Schindler's List,2005,4.5
+Tony,Star Trek: First Contact,2002,3
+Susan,Casablanca,2003,4
+Peter,Blade Runner,2004,4
+John,Schindler's List,2005,5
+Sean,Trainspotting,1998,4.5
+Lilly,The Usual Suspects,1999,3
+Linna,The Wrong Trousers,2000,5
+Jason,A Close Shave,2001,2.5
+Joseph,Star Wars,1996,1
+Tony,The Shawshank Redemption,1997,3
+Susan,Trainspotting,1998,4
+Shirley,The Usual Suspects,1999,4
+John,The Wrong Trousers,2000,5
+Sean,Blade Runner,2004,3
+Susan,Star Trek: First Contact,2002,5
+Peter,Casablanca,2003,2.5
+Shirley,Blade Runner,2004,4
+John,Schindler's List,2005,5
+Sean,Star Trek: First Contact,2002,3
+Lilly,Casablanca,2003,5
+Linna,Blade Runner,2004,5
+Jason,Schindler's List,2005,2.5
+Joseph,Trainspotting,1998,1
+Linna,The Shawshank Redemption,1997,3
+Jason,Trainspotting,1998,2.5
+Sean,The Usual Suspects,1999,4
+Susan,The Wrong Trousers,2000,5
+Peter,A Close Shave,2001,3
+Linna,Star Trek: First Contact,2002,4
