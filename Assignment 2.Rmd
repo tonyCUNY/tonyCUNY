@@ -2,18 +2,22 @@
 title: "Data 607 Week 2 Assignment"
 author: "CHUN SHING LEUNG"
 date: "2023-09-09"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ## Library
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 library(RMySQL)
 library(DBI)
+library(sqldf)
+library(dplyr)
 
 ```
 
-## Load th einformation from SQL database into an R dataframe
+## Load the information from SQL database into an R dataframe
 
 Assignment – SQL and R
 Choose six recent popular movies. Ask at least five people that you know (friends, family, classmates, imaginary
@@ -32,5 +36,19 @@ mydb = dbConnect(MySQL(), user='root', password='1234test', dbname='mr', host='l
 movie <- dbGetQuery(mydb, "select Name, movieId, rating from mr.A2movierate")
 summary(movie)
 head(movie)
+
+# Sort the dataset.
+
+movie_sort <- movie |> 
+                arrange(desc(rating)) 
+
+head(movie_sort)
+
+```
+
+```{r}
+# Disconnect all connection to the MySQL database.
+
+lapply(dbListConnections(MySQL()), dbDisconnect)
 
 ```
