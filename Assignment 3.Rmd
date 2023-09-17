@@ -1,0 +1,94 @@
+---
+title: "Data 607 Week 3 Assignment"
+author: "CHUN SHING LEUNG"
+date: "2023-09-16"
+output: html_document
+---
+## Library
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(stringr)
+library(dplyr)
+
+
+```
+
+## 1. Using the 173 majors listed in fivethirtyeight.com’s College Majors dataset [https://fivethirtyeight.com/features/the-economic-guide-to-picking-a-college-major/], provide code that identifies the majors that contain either "DATA" or "STATISTICS"
+
+```{r}
+
+major_list <- read.csv("https://raw.githubusercontent.com/fivethirtyeight/data/master/college-majors/majors-list.csv",header = TRUE, sep = ",")
+
+head(major_list)
+
+grep(pattern = 'data|statistics',major_list$Major, value = TRUE, ignore.case = TRUE)
+
+```
+
+## 2. Write code that transforms the data below:
+[1] "bell pepper"  "bilberry"     "blackberry"   "blood orange"
+[5] "blueberry"    "cantaloupe"   "chili pepper" "cloudberry"  
+[9] "elderberry"   "lime"         "lychee"       "mulberry"    
+[13] "olive"        "salal berry"
+
+Into a format like this:
+c("bell pepper", "bilberry", "blackberry", "blood orange", "blueberry", "cantaloupe", "chili pepper", "cloudberry", "elderberry", "lime", "lychee", "mulberry", "olive", "salal berry")
+
+```{r}
+
+data1 <- '"bell pepper" "bilberry" "blackberry" "blood orange" "blueberry" "cantaloupe" "chili pepper" "cloudberry" "elderberry" "lime" "lychee" "mulberry" "olive" "salal berry"'
+
+data2 <- strsplit(data1, " ")
+data4 <- as.data.frame(data2)
+head(data4)
+
+```
+
+#3 Describe, in words, what these expressions will match:
+(.)\1\1
+"(.)(.)\\2\\1"
+(..)\1
+"(.).\\1.\\1"
+"(.)(.)(.).*\\3\\2\\1"
+
+
+(.)\1\1: 
+This shows the same character repeating three times. 
+
+"(.)(.)\\2\\1": 
+The shows a pair of characters and then it reverses the same pair of characters and put them at the end.
+
+(..)\1: 
+Any 2 characters repeated 1 time.
+
+"(.).\\1.\\1": 
+This shows 1 character and any character after it, And then, it shows the first 1 character followed by any character. Lastly, it shows the first character again. 
+
+"(.)(.)(.).*\\3\\2\\1" 
+This shows 3 characters and any character after it. It then shows the 3 characters again in reverse order. 
+
+#4 Construct regular expressions to match words that:
+
+Start and end with the same character.
+
+```{r}
+
+str_view("apple", "^(.)((.*\\1$)|\\1$)")
+
+```
+Contain a repeated pair of letters (e.g. "church" contains "ch" repeated twice.)
+
+```{r}
+
+str_view("church", "([A-Za-z][A-Za-z]).*\\1")
+
+```
+Contain one letter repeated in at least three places (e.g. "eleven" contains three "e"s.)
+
+```{r}
+
+str_view("eleven", "([A-Za-z]).*\\1.*\\1.")
+
+```
+
