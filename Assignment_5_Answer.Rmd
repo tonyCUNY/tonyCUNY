@@ -1,0 +1,111 @@
+---
+title: "Assigment_5_Answer"
+author: "CHUN SHING LEUNG"
+date: "2023-09-30"
+output: html_document
+---
+
+(1) Create a .CSV file (or optionally, a MySQL database!) that includes all of the information above.
+You’re encouraged to use a “wide” structure similar to how the information appears above, so
+that you can practice tidying and transformations as described below.
+
+(2) Read the information from your .CSV file into R, and use tidyr and dplyr as needed to tidy
+and transform your data. 
+
+```{r warning=FALSE, message=FALSE}
+# Tidyverse packages includes ggplot2, dplyr, tidyr already
+library(tidyverse)
+
+table <- read.csv("https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/assignment5.csv")
+
+table
+
+```
+
+(2) Tidy and transform the data. 
+
+```{r}
+# Remove row with NA value
+# Rename X and X.1 to Airline and Status
+table_1 <- table |> 
+              slice(-3) |>
+              rename(Airline = X, Status = X.1)
+
+```
+
+```{r}
+# Fill in the missing values under Airline column
+table_1[2, 1] <- 'ALASKA'
+table_1[4, 1] <- 'AM WEST'
+
+table_1
+```
+
+```{r}
+# Use pivot_longer() to transform all location into Destination column
+# arrange by Destination column
+
+table_2 <- table_1 |> 
+  pivot_longer(
+    cols = c("Los.Angeles", "Phoenix", "San.Diego", "San.Francisco", "Seattle"),
+    names_to = "Destination",
+    values_to = "Count"
+  ) |> 
+    arrange(Destination)
+
+table_2
+
+```
+```{r}
+# Use pivot_wider() to transform values under Status into two columns: On_time, Delayed
+# value will be from Count column
+# rename the new column
+
+table_3 <- table_2 |> 
+  pivot_wider(
+    names_from = Status,
+    values_from = Count,
+  ) |> 
+    rename(On_time = 'on time', Delayed = delayed)
+
+table_3
+
+```
+
+```{r}
+# Create a column: Delay_rate
+
+table_4 <- table_3 |> 
+            mutate(Delay_rate = round((Delayed / (On_time + Delayed)) * 100, 2))
+table_4
+
+```
+(3) Perform analysis to compare the arrival delays for the two airlines
+
+```{r}
+# Create a table showing two airlines Delay_rate for each Destination
+
+table_5 <- table_4 |> 
+            group_by(Destination, Airline) |> 
+            summarize(Delay_rate) |> 
+            spread(Airline, Delay_rate) |> 
+            rename(AM_WEST = 'AM WEST')
+    
+table_5
+
+```
+
+Conclusion: AM WEST has higher delay_rate than ALASKA
+
+```{r}
+# Visualize the results
+
+table_4 |>
+  group_by(Airline) |> 
+      ggplot(aes(x = Destination, y = Delay_rate, fill = Airline)) +
+      geom_bar(stat = "identity", position = "dodge") +
+      labs(title = "Airline Arrival Delay",
+        x = "Destination",
+        y = "Delayrate (%)")
+
+```
