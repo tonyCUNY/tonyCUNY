@@ -1,0 +1,11 @@
+"Airline","Destination","on time","delayed"
+"ALASKA","Los.Angeles",497,62
+"AM WEST","Los.Angeles",694,117
+"ALASKA","Phoenix",221,12
+"AM WEST","Phoenix",4840,415
+"ALASKA","San.Diego",212,20
+"AM WEST","San.Diego",383,65
+"ALASKA","San.Francisco",503,102
+"AM WEST","San.Francisco",320,129
+"ALASKA","Seattle",1841,305
+"AM WEST","Seattle",201,61
