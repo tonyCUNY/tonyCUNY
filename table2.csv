@@ -1,0 +1,21 @@
+"Airline","Status","Destination","Count"
+"ALASKA","on time","Los.Angeles",497
+"ALASKA","delayed","Los.Angeles",62
+"AM WEST","on time","Los.Angeles",694
+"AM WEST","delayed","Los.Angeles",117
+"ALASKA","on time","Phoenix",221
+"ALASKA","delayed","Phoenix",12
+"AM WEST","on time","Phoenix",4840
+"AM WEST","delayed","Phoenix",415
+"ALASKA","on time","San.Diego",212
+"ALASKA","delayed","San.Diego",20
+"AM WEST","on time","San.Diego",383
+"AM WEST","delayed","San.Diego",65
+"ALASKA","on time","San.Francisco",503
+"ALASKA","delayed","San.Francisco",102
+"AM WEST","on time","San.Francisco",320
+"AM WEST","delayed","San.Francisco",129
+"ALASKA","on time","Seattle",1841
+"ALASKA","delayed","Seattle",305
+"AM WEST","on time","Seattle",201
+"AM WEST","delayed","Seattle",61
