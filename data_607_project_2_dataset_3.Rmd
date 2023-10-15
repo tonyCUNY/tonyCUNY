@@ -1,0 +1,115 @@
+---
+title: "Data_607_Project_2_Dataset_3"
+author: "CHUN SHING LEUNG"
+date: "2023-10-15"
+output: html_document
+---
+
+## Loading the dataset
+
+The third data set is Hotel booking demand from Kaggle.
+https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand/code
+
+```{r warning=FALSE, message=FALSE}
+
+hotel <- read_csv("https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/hotel_bookings.csv")
+
+glimpse(hotel)
+summary(hotel)
+
+```
+
+## Duplicated and missing value in this dataset
+
+31994 rows are duplicated and there are 4 missing value in children column.
+
+```{r warning=FALSE, message=FALSE}
+# Find out number of missing missing value
+# Find out number of duplicated value
+
+hotel |> 
+  summarise(across(everything(), ~ sum(is.na(.)))) |>
+  t()
+
+nrow(hotel[duplicated(hotel),])
+
+```
+
+
+## Data cleaning and transformation
+
+
+```{r warning=FALSE, message=FALSE}
+# drop rows contains NA value
+# drop duplicates rows
+# remove column: 
+# transform arrival_date_month into numeric value
+# merge these three column in to arrival_date
+# drop the column arrival_date_week_number
+# Need at least 1 adult to reserve a hotel. Any rows where number of adults equal to 0 need to be eliminated.
+# Merge children and babies into new column 'kids'
+# drop the column children, babies
+# Merge stays_in_weekend_nights, stays_in_week_nights into new column 'total_nights'
+
+hotel2 <- hotel |> 
+              drop_na() |> 
+              distinct() |> 
+              select(-c(agent, company, adr)) |> 
+              mutate(arrival_date_month = match(tolower(arrival_date_month), tolower(month.name))) |> 
+              mutate(arrival_date = as.Date(paste(arrival_date_year, arrival_date_month, arrival_date_day_of_month, sep = "-"))) |> 
+              select(-arrival_date_week_number) |> 
+              filter(adults != 0) |> 
+              mutate(kids = children + babies) |>
+              select(-c(children, babies)) |> 
+              relocate(kids, .after = adults) |> 
+              mutate(total_nights = stays_in_weekend_nights + stays_in_week_nights) |>
+              select(-c(stays_in_weekend_nights, stays_in_week_nights)) |> 
+              relocate(total_nights, .after = arrival_date_day_of_month)
+
+hotel2
+
+```
+
+
+## Visualize the data
+
+
+```{r warning=FALSE, message=FALSE}
+
+# Compare Which Hotel Type is more popular
+hotel2 |>
+  group_by(hotel) |> 
+  summarise(count = n()) |> 
+  ggplot(aes(x = hotel, y = count)) +
+  geom_bar(stat = "identity") + 
+  geom_text(aes(label = count), vjust = -0.5) +
+  labs(x = "Hotel Type", y = "Number of Reservations")
+
+# How many percentage of reservations got cancelled?
+
+hotel2 |>
+  group_by(hotel, is_canceled) |> 
+  summarise(count = n()) |> 
+  mutate(percentage = count / sum(count)) |> 
+  ggplot(aes(x = hotel, y = percentage, fill = ifelse(is_canceled == 1, "canceled", "not canceled"))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = scales::percent(percentage)), position = position_dodge(width = 0.9), vjust = -0.5) +
+  labs(title = "Percentage of Canceled Reservations By Hotel", x = "Hotel", y = "Percentage", fill="Type")+
+  scale_y_continuous(labels = scales::percent)
+
+# Top 10 Countries of Origin for Hotel Visitors
+
+hotel2 |>
+  group_by(country) |> 
+  summarise(count = n()) |> 
+  top_n(10) |> 
+  ggplot(aes(x = reorder(country, count), y = count, fill = country)) +
+  geom_bar(stat = "identity") + 
+  coord_flip() +
+  labs(title = "Top 10 Countries of Origin for Hotel Visitors",
+       x = "Country",
+       y = "Number of Guests")
+
+
+
+```
