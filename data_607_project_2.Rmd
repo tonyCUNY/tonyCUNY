@@ -1,0 +1,162 @@
+---
+title: "Data_607_Project_2_Dataset_1"
+author: "CHUN SHING LEUNG"
+date: "2023-10-14"
+output: html_document
+---
+
+The first data set is USA real estate dataset from Kaggle.
+https://www.kaggle.com/datasets/ahmedshahriarsakib/usa-real-estate-dataset
+
+Which sate has the highest average house price and which city in this state has the biggest house?
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+
+realestate <- read_csv("~/data_607_project_2/realtor-data.csv")
+
+head(realestate)
+
+realestate
+
+```
+
+## Data cleaning and transformation
+
+```{r}
+# remove duplicate rows 
+# drop all rows with NA value
+# remove prev_sold_date, status and zip code column
+# rename bed to bedroom
+# relocate State, city to the front
+realestate2 <- realestate |> 
+                    distinct() |> 
+                    drop_na() |> 
+                    select(-c(status, prev_sold_date, zip_code)) |>
+                    rename(bedroom = 'bed') |>
+                    relocate(state, city)
+realestate2
+# 
+
+```
+
+## Examining what range of data is more common.
+
+```{r}
+# Summary to see number of bedroom, bath and house size in the narrowed data set
+
+sum_bath <- realestate2 |> 
+              group_by(bath) |> 
+              summarise(n = n()) 
+sum_bath
+ggplot(sum_bath, aes(x = bath, y = n)) +
+geom_bar(stat = "identity") +
+scale_x_continuous(limits = c(0, 15)) +
+labs(title = "Bathroom count",
+     x = "Num of Bathroom",
+     y = "Count")
+
+sum_bed <- realestate2 |> 
+              group_by(bedroom) |> 
+              summarise(n = n())
+sum_bed
+ggplot(sum_bed, aes(x = bedroom, y = n)) +
+geom_bar(stat = "identity") +
+scale_x_continuous(limits = c(0, 15)) +
+labs(title = "Bedroom count",
+     x = "Num of Bedroom",
+     y = "Count")
+
+# 
+
+```
+
+## Further transforming the data base.
+
+```{r}
+# From the Bathroom count summary and plot, any house with bathroom more than 5 can be removed from the data as they are not common and can be considered as extreme observation.
+# From the Bedroom count summary and plot, any house with bedroom more than 6 can be removed from the data as they are not common and can be considered as extreme observation.
+
+# When the x axis scale is limited between 0 to 15, both plots show some rows contain missing value as well.
+
+realestate3 <- realestate2 |> 
+                  filter(bath < 6) |> 
+                  filter(bedroom < 7)
+
+realestate3 |> 
+    group_by(bath) |> 
+    summarise(n = n()) |> 
+    ggplot(aes(x = bath, y = n)) +
+    geom_bar(stat = "identity") +
+    scale_x_continuous(limits = c(0, 6)) +
+    labs(title = "Bathroom count",
+         x = "Num of Bathroom",
+         y = "Count")
+
+realestate3 |> 
+    group_by(bedroom) |> 
+    summarise(n = n()) |> 
+    ggplot(aes(x = bedroom, y = n)) +
+    geom_bar(stat = "identity") +
+    scale_x_continuous(limits = c(0, 8)) +
+    labs(title = "Bedroom count",
+         x = "Num of Bedroom",
+         y = "Count")
+
+```
+
+## Visualize the data
+
+New York has the highest Average house price!!
+Glen Cove has the biggest house!!
+
+```{r}
+
+# Average price by Sate
+avg_price_by_state <- realestate3 |> 
+                        group_by(state) |> 
+                        summarise(avg_price = mean(price))
+
+ggplot(avg_price_by_state, aes(x = reorder(state, avg_price), y = avg_price)) +
+  geom_bar(stat = "identity") + 
+  coord_flip() +
+  labs(title = "Average price by Sate",
+       x = "State",
+       y = "Average price")
+
+# Top 10 expensive city in New York
+avg_price_by_city <- realestate3 |>
+                        filter(state == 'New York') |> 
+                        group_by(city) |>
+                        summarise(avg_price = mean(price))
+                        
+
+avg_price_by_city |> 
+  top_n(10, avg_price) |> 
+  ggplot(aes(x = reorder(city, avg_price), y = avg_price)) +
+  geom_bar(stat = "identity") + 
+  coord_flip() +
+  labs(title = "Top 10 expensive city in New York",
+       x = "City in New York State",
+       y = "Average price")
+
+# Top 10 city with biggest house in New York
+
+avg_housesize_by_city <- realestate3 |>
+                        filter(state == 'New York') |> 
+                        group_by(city) |>
+                        summarise(avg_size = mean(house_size))
+                        
+
+avg_housesize_by_city |> 
+  top_n(10, avg_size) |> 
+  ggplot(aes(x = reorder(city, avg_size), y = avg_size)) +
+  geom_bar(stat = "identity") + 
+  coord_flip() +
+  labs(title = "Top 10 city with biggest house in New York",
+       x = "City in New York State",
+       y = "Average House size")
+
+
+```
+
