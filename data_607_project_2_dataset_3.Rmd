@@ -11,8 +11,9 @@ The third data set is Hotel booking demand from Kaggle.
 https://www.kaggle.com/datasets/jessemostipak/hotel-booking-demand/code
 
 ```{r warning=FALSE, message=FALSE}
-
-hotel <- read_csv("https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/hotel_bookings.csv")
+library(tidyverse)
+library(lubridate)
+hotel <- read_csv("~/data_607_project_2/hotel_bookings.csv")
 
 glimpse(hotel)
 summary(hotel)
