@@ -17,13 +17,13 @@ Chun Shing Leung
 ## Project Tools
 slack channel and zoom are used for collaboration and communication. 
 We will use R studio to write the codes and publish it to RPubs (https://rpubs.com) . 
-To create the ERD, the team used Quick Database Diagrams (https://www.quickdatabasediagrams.com). 
+We will use draw.io to create the ER Diagram. 
 Source CSV and RMD files are saved in a github so all team members can access the code.
-
+We will use google slides for presentation.
 
 
 ## Project 3 Data Sources
-The data used to answer the question is "Netflix TV Shows and Movies" Netflix from Kaggle.
+The data used to answer the question is "Netflix TV Shows and Movies" from Kaggle.
 
 Source: https://www.kaggle.com/datasets/victorsoeiro/netflix-tv-shows-and-movies/code
 
@@ -34,7 +34,7 @@ https://github.com/tonyCUNY/tonyCUNY/blob/main/titles.csv
 
 1. Load the data into R using tidyverse package
 2. tidy/transform the data
-3. Visualize the relationship between variable
+3. Visualize the relationship between variables
 4. Answer questions such as:  
    What are the top 10 movies with highest scores?  
    Which movies have large amount of voters?  
@@ -43,7 +43,7 @@ https://github.com/tonyCUNY/tonyCUNY/blob/main/titles.csv
 
 ## ER Diagram
 
-
+https://github.com/tonyCUNY/tonyCUNY/blob/main/ER2.jpg
 
 
 
