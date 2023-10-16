@@ -1,0 +1,77 @@
+---
+title: "DATA607_Assignment_07"
+author: "CHUN SHING LEUNG"
+date: "2023-10-15"
+output: html_document
+---
+
+Pick three of your favorite books on one of your favorite subjects. At least one of the books should have more
+than one author. For each book, include the title, authors, and two or three other attributes that you find
+interesting.
+Take the information that you’ve selected about these three books, and separately create three files which
+store the book’s information in HTML (using an html table), XML, and JSON formats (e.g. “books.html”,
+“books.xml”, and “books.json”). To help you better understand the different file structures, I’d prefer that you
+create each of these files “by hand” unless you’re already very comfortable with the file formats.
+
+Write R code, using your packages of choice, to load the information from each of the three sources into
+separate R data frames. Are the three data frames identical?
+
+The three dataframe is slightly different on format.
+For example, Json file will add "book." on all column.
+the as.data.frame in XML will generate \n in all cell value which will take further step to remove
+
+
+## Loading the packages
+
+```{r setup, include=FALSE}
+library(rvest)
+library(xml2)
+library(XML)
+library(RCurl)
+library(DT)
+library(jsonlite)
+
+```
+
+## loading the HTML table from github
+
+```{r}
+
+html_file <- "https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/Book.html"
+html <- read_html(html_file)
+
+table <- html |>  
+          html_nodes("table") |> 
+          html_table(fill = TRUE)
+
+df <- as.data.frame(table)
+
+df
+
+```
+
+## loading the xml table from github
+
+
+```{r}
+
+xmlurl <- getURL("https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/book5.xml")
+results <- xmlParse(xmlurl)
+df2 <- xmlToDataFrame(results)
+df3 <- as.data.frame(df2)
+# \n shown in all cell value
+# remove it by the following code:
+df3[] <- lapply(df3, function(x) gsub("\n", "", x))
+df3
+```
+## loading the json table from github
+
+```{r}
+
+json_file <- "https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/book6.json"
+json_data <- fromJSON(json_file)
+df4 <- as.data.frame(json_data)
+df4
+
+
+```
