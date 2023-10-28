@@ -1,0 +1,122 @@
+---
+title: "Data_607_Project_3"
+output: html_document
+date: "2023-10-28"
+---
+
+## Project 3 Team Members
+Ariann Chai
+Chun Shing Leung 
+Lwin Shwe  
+ 
+
+## The data used to answer the question is "Netflix TV Shows and Movies" from Kaggle.
+
+This data set listed all shows available on Netflix streaming. It was acquired in July 2022 containing data available in the United States.
+
+Source: https://www.kaggle.com/datasets/victorsoeiro/netflix-tv-shows-and-movies/code
+
+   What are the top 10 movies with highest scores?  
+   Which movies have large amount of voters?  
+   How these information change across countries, years, ages and genres?  
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+
+url <- "https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/titles2.csv"
+
+netflix <- read_csv(url, col_names = TRUE)
+
+head(netflix)
+
+```
+
+## Data Exploration
+
+There are 5850 rows and 15 columns in this data set
+There are 2106 shows and 3744 movies
+There are 8167 missing values in this data set
+Each column missing values are listed. Please see below.
+No observations are duplicated
+
+
+```{r}
+glimpse(netflix)
+summary(netflix)
+show_count <- sum(netflix$type == "SHOW")
+movie_count <- sum(netflix$type == "MOVIE")
+total_na <- sum(is.na(netflix))
+print(show_count)
+print(movie_count)
+print(total_na)
+netflix |> 
+  summarise(across(everything(), ~ sum(is.na(.)))) |>
+  t()
+nrow(netflix[duplicated(netflix),])
+
+
+```
+
+## Data Cleaning and transformation
+
+The NA values for title column can be removed as it doesn't refer to any movie or show.
+Some NA values under age_certification, score, votes can be kept as removing them will take up too much information from this data
+Some column such as id, description, seasons, imdb_id are not useful to our anaylsis. They can be removed.
+Production_countries column need to be cleared up.
+Preparing a new set of data frame so Genres column are broken down by genres value.
+
+```{r}
+
+# Drop NA values for title column
+# Drop id, description, seasons, imdb_id column
+# Any production countries with multiple location is renamed as "GLOBAL"
+# Clean the production_countries column by removing the bracket
+# There are empty values under production_countries. They are removed as well
+
+netflix_clean <- netflix |> 
+                    filter(!is.na(title)) |> 
+                    select(-c(id, description, seasons, imdb_id)) |> 
+                    mutate(production_countries = ifelse(grepl(",", production_countries), "GLOBAL", production_countries)) |> 
+                    mutate(production_countries = str_extract_all(production_countries,"[A-Za-z]+") |> sapply(toString) ) |> 
+                    filter(production_countries != "")
+
+# Take a look of the cleaned data
+
+glimpse(netflix_clean)
+netflix_clean |> 
+  summarise(across(everything(), ~ sum(is.na(.)))) |>
+  t()
+
+# Clean genre column 
+# Remove the brackets and the quotes
+# Separate genres type
+# Remove empty values
+
+netflix_genres <- netflix_clean |> 
+                    mutate(genres = gsub("\\[|\\]|'", "", genres)) |> 
+                    separate_rows(genres, sep = ",\\s*") |> 
+                    filter(!is.na(genres) & genres != "")
+
+glimpse(netflix_genres)
+
+```
+
+
+## Data Analysis and Visualization 
+
+  What are the top 10 movies with highest scores?  
+  Which movies have large amount of voters?  
+  How these information change across countries, years, ages and genres?
+  Age Certifications Count
+  Genres Count
+  
+```{r}
+result <- netflix_genres %>%
+  group_by(type, genres) %>%
+  summarise(GenreCount = n())
+result
+```
+
+## Conclusion
+## Which are the most valued data science skills?
+
