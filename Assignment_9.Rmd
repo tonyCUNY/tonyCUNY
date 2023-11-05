@@ -1,0 +1,86 @@
+---
+title: "Week 9 Assignment"
+author: "CHUN SHING LEUNG"
+date: "2023-11-04"
+output: html_document
+---
+## Assignment
+The New York Times web site provides a rich set of APIs, as described here: https://developer.nytimes.com/apis
+
+You’ll need to start by signing up for an API key. Your task is to choose one of the New York Times APIs, construct an interface in R to read in the JSON data, and transform it into an R DataFrame.
+
+## Libraries
+
+```{r warning=FALSE, message=FALSE}
+library(jsonlite)
+library(tidyverse)
+library(httr)
+
+```
+
+## Connecting API
+
+Top Stories API is used. There are many sections available. Science section is selected.
+https://developer.nytimes.com/docs/top-stories-product/1/overview
+
+
+```{r}
+# API Key
+apikey <- "VFeXw5YKKBTWemlgGWuu1GlZm73D1TAM"
+
+#URL
+url <- "https://api.nytimes.com/svc/topstories/v2/science.json?api-key="
+
+#GET
+resp <- GET(paste(url, apikey, sep=""))
+resp
+summary(resp)
+
+text_content <- content(resp, as = "text")
+
+```
+## From JSON data to an R dataframe
+
+```{r}
+data <- fromJSON(text_content)
+df <- as.data.frame(data)
+
+glimpse(df)
+
+```
+
+## Tidy the Data
+
+```{r}
+# select columns and rename them
+df2 <- df |> 
+        select(results.title, results.section, results.published_date) |> 
+        rename(title = results.title, result_section = results.section, published_date = results.published_date)
+
+# second row need to be removed as it has empty title
+df2 <- df2[-2,]
+
+```
+
+## What is the most common result section under science section?
+
+We can see Health related article is more common!!
+
+```{r}
+# Summary of result_section and its count
+df3 <- df2 |> 
+        group_by(result_section) |> 
+        summarise(n = n())
+df3
+
+# Bar plot
+ggplot(df3, aes(x = reorder(result_section, -n), y = n, fill = result_section)) +
+geom_bar(stat = "identity") +
+labs(title = "Common article section under Science Category",
+     x = "Result section",
+     y = "Count") +
+theme_minimal()
+
+```
+
+
