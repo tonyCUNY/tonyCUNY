@@ -1,50 +1,51 @@
-Alabama,F,23.6 per 100k,Republican
-Alaska,F,23.5 per 100k,Republican
-Arizona,F,16.7 per 100k,Swing State
-Arkansas,F,22.6 per 100k,Republican
-California,A,8.5 per 100k,Democrat
-Colorado,B,15.4 per 100k,Democrat
-Connecticut,A,6 per 100k,Democrat
-Delaware,B,14.4 per 100k,Democrat
-Florida,C,13.7 per 100k,Swing State
-Georgia,F,17.7 per 100k,Swing State
-Hawaii,A,3.4 per 100k,Democrat
-Idaho,F,17.6 per 100k,Republican
-Illinois,A,14.1 per 100k,Democrat
-Indiana,D,17.3 per 100k,Republican
-Iowa,F,11.2 per 100k,Republican
-Kansas,F,16.9 per 100k,Republican
-Kentucky,F,20.1 per 100k,Republican
-Louisiana,F,26.3 per 100k,Republican
-Maine,F,10.4 per 100k,Democrat
-Maryland,A,13.5 per 100k,Democrat
-Massachusetts,A,3.7 per 100k,Democrat
-Michigan,C,14.6 per 100k,Swing State
-Minnesota,C,8.9 per 100k,Swing State
-Mississippi,F,28.6 per 100k,Republican
-Missouri,F,23.9 per 100k,Republican
-Montana,F,20.9 per 100k,Republican
-Nebraska,C,10.1 per 100k,Republican
-Nevada,C,17 per 100k,Swing State
-New Hampshire,F,8.9 per 100k,Democrat
-New Jersey,A,5 per 100k,Democrat
-New Mexico,C,22.7 per 100k,Democrat
-New York,A,5.3 per 100k,Democrat
-North Carolina,C,16 per 100k,Swing State
-North Dakota,F,13.8 per 100k,Republican
-Ohio,D,15.2 per 100k,Swing State
-Oklahoma,F,20.7 per 100k,Republican
-Oregon,B,13 per 100k,Democrat
-Pennsylvania,B,13.6 per 100k,Swing State
-Rhode Island,B,5.1 per 100k,Democrat
-South Carolina,F,22 per 100k,Republican
-South Dakota,F,13.6 per 100k,Republican
-Tennessee,F,21.3 per 100k,Republican
-Texas,F,14.2 per 100k,Republican
-Utah,F,13.6 per 100k,Republican
-Vermont,C,11.6 per 100k,Democrat
-Virginia,B,13.4 per 100k,Democrat
-Washington,B,10.9 per 100k,Democrat
-West Virginia,F,18.1 per 100k,Republican
-Wisconsin,C,12.2 per 100k,Swing State
-Wyoming,F,25.9 per 100k,Republican
+state,rank,red_blue_state
+Alabama,F,Republican
+Alaska,F,Republican
+Arizona,F,Swing State
+Arkansas,F,Republican
+California,A,Democrat
+Colorado,B,Democrat
+Connecticut,A,Democrat
+Delaware,B,Democrat
+Florida,C,Swing State
+Georgia,F,Swing State
+Hawaii,A,Democrat
+Idaho,F,Republican
+Illinois,A,Democrat
+Indiana,D,Republican
+Iowa,F,Republican
+Kansas,F,Republican
+Kentucky,F,Republican
+Louisiana,F,Republican
+Maine,F,Democrat
+Maryland,A,Democrat
+Massachusetts,A,Democrat
+Michigan,C,Swing State
+Minnesota,C,Swing State
+Mississippi,F,Republican
+Missouri,F,Republican
+Montana,F,Republican
+Nebraska,C,Republican
+Nevada,C,Swing State
+New Hampshire,F,Democrat
+New Jersey,A,Democrat
+New Mexico,C,Democrat
+New York,A,Democrat
+North Carolina,C,Swing State
+North Dakota,F,Republican
+Ohio,D,Swing State
+Oklahoma,F,Republican
+Oregon,B,Democrat
+Pennsylvania,B,Swing State
+Rhode Island,B,Democrat
+South Carolina,F,Republican
+South Dakota,F,Republican
+Tennessee,F,Republican
+Texas,F,Republican
+Utah,F,Republican
+Vermont,C,Democrat
+Virginia,B,Democrat
+Washington,B,Democrat
+West Virginia,F,Republican
+Wisconsin,C,Swing State
+Wyoming,F,Republican
