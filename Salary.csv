@@ -1,204 +1,204 @@
 State,Annual Salary,Monthly Pay,Weekly Pay,Hourly Wage,Job Title
-New York,"$136,172 ","$11,347 ","$2,618 ",$65.47 ,Data Scientist
-Vermont,"$133,828 ","$11,152 ","$2,573 ",$64.34 ,Data Scientist
-California,"$131,441 ","$10,953 ","$2,527 ",$63.19 ,Data Scientist
-Maine,"$127,644 ","$10,637 ","$2,454 ",$61.37 ,Data Scientist
-Idaho,"$126,275 ","$10,522 ","$2,428 ",$60.71 ,Data Scientist
-Washington,"$125,289 ","$10,440 ","$2,409 ",$60.24 ,Data Scientist
-Pennsylvania,"$124,713 ","$10,392 ","$2,398 ",$59.96 ,Data Scientist
-Massachusetts,"$123,188 ","$10,265 ","$2,369 ",$59.23 ,Data Scientist
-Alaska,"$122,407 ","$10,200 ","$2,353 ",$58.85 ,Data Scientist
-New Jersey,"$121,955 ","$10,162 ","$2,345 ",$58.63 ,Data Scientist
-New Hampshire,"$121,666 ","$10,138 ","$2,339 ",$58.49 ,Data Scientist
-Oregon,"$121,011 ","$10,084 ","$2,327 ",$58.18 ,Data Scientist
-North Dakota,"$120,890 ","$10,074 ","$2,324 ",$58.12 ,Data Scientist
-Wisconsin,"$120,117 ","$10,009 ","$2,309 ",$57.75 ,Data Scientist
-Wyoming,"$119,040 ","$9,920 ","$2,289 ",$57.23 ,Data Scientist
-Hawaii,"$118,595 ","$9,882 ","$2,280 ",$57.02 ,Data Scientist
-Colorado,"$117,956 ","$9,829 ","$2,268 ",$56.71 ,Data Scientist
-Indiana,"$116,954 ","$9,746 ","$2,249 ",$56.23 ,Data Scientist
-Nevada,"$115,741 ","$9,645 ","$2,225 ",$55.64 ,Data Scientist
-New Mexico,"$115,421 ","$9,618 ","$2,219 ",$55.49 ,Data Scientist
-Minnesota,"$115,258 ","$9,604 ","$2,216 ",$55.41 ,Data Scientist
-Arizona,"$114,536 ","$9,544 ","$2,202 ",$55.07 ,Data Scientist
-South Dakota,"$114,254 ","$9,521 ","$2,197 ",$54.93 ,Data Scientist
-Montana,"$112,811 ","$9,400 ","$2,169 ",$54.24 ,Data Scientist
-Ohio,"$112,255 ","$9,354 ","$2,158 ",$53.97 ,Data Scientist
-Rhode Island,"$112,085 ","$9,340 ","$2,155 ",$53.89 ,Data Scientist
-Delaware,"$111,877 ","$9,323 ","$2,151 ",$53.79 ,Data Scientist
-Alabama,"$111,402 ","$9,283 ","$2,142 ",$53.56 ,Data Scientist
-Virginia,"$110,662 ","$9,221 ","$2,128 ",$53.20 ,Data Scientist
-Connecticut,"$109,897 ","$9,158 ","$2,113 ",$52.84 ,Data Scientist
-Iowa,"$109,690 ","$9,140 ","$2,109 ",$52.74 ,Data Scientist
-Illinois,"$108,858 ","$9,071 ","$2,093 ",$52.34 ,Data Scientist
-Mississippi,"$108,712 ","$9,059 ","$2,090 ",$52.27 ,Data Scientist
-Maryland,"$108,449 ","$9,037 ","$2,085 ",$52.14 ,Data Scientist
-Tennessee,"$107,174 ","$8,931 ","$2,061 ",$51.53 ,Data Scientist
-Utah,"$106,899 ","$8,908 ","$2,055 ",$51.39 ,Data Scientist
-Nebraska,"$106,424 ","$8,868 ","$2,046 ",$51.17 ,Data Scientist
-Missouri,"$105,000 ","$8,750 ","$2,019 ",$50.48 ,Data Scientist
-South Carolina,"$103,937 ","$8,661 ","$1,998 ",$49.97 ,Data Scientist
-Georgia,"$103,779 ","$8,648 ","$1,995 ",$49.89 ,Data Scientist
-Oklahoma,"$103,063 ","$8,588 ","$1,981 ",$49.55 ,Data Scientist
-Texas,"$102,927 ","$8,577 ","$1,979 ",$49.48 ,Data Scientist
-Kansas,"$102,344 ","$8,528 ","$1,968 ",$49.20 ,Data Scientist
-North Carolina,"$101,792 ","$8,482 ","$1,957 ",$48.94 ,Data Scientist
-Louisiana,"$100,631 ","$8,385 ","$1,935 ",$48.38 ,Data Scientist
-Kentucky,"$97,776 ","$8,148 ","$1,880 ",$47.01 ,Data Scientist
-Michigan,"$97,737 ","$8,144 ","$1,879 ",$46.99 ,Data Scientist
-West Virginia,"$96,317 ","$8,026 ","$1,852 ",$46.31 ,Data Scientist
-Arkansas,"$92,891 ","$7,740 ","$1,786 ",$44.66 ,Data Scientist
-Florida,"$91,843 ","$7,653 ","$1,766 ",$44.16 ,Data Scientist
-Oregon,"$149,704 ","$12,475 ","$2,878 ",$71.97 ,Data Engineer
-Alaska,"$148,968 ","$12,414 ","$2,864 ",$71.62 ,Data Engineer
-North Dakota,"$148,944 ","$12,412 ","$2,864 ",$71.61 ,Data Engineer
-Massachusetts,"$147,166 ","$12,263 ","$2,830 ",$70.75 ,Data Engineer
-Hawaii,"$145,799 ","$12,149 ","$2,803 ",$70.10 ,Data Engineer
-Washington,"$142,449 ","$11,870 ","$2,739 ",$68.49 ,Data Engineer
-Nevada,"$140,850 ","$11,737 ","$2,708 ",$67.72 ,Data Engineer
-South Dakota,"$140,768 ","$11,730 ","$2,707 ",$67.68 ,Data Engineer
-Colorado,"$139,003 ","$11,583 ","$2,673 ",$66.83 ,Data Engineer
-Rhode Island,"$138,661 ","$11,555 ","$2,666 ",$66.66 ,Data Engineer
-New York,"$132,125 ","$11,010 ","$2,540 ",$63.52 ,Data Engineer
-Delaware,"$130,669 ","$10,889 ","$2,512 ",$62.82 ,Data Engineer
-Vermont,"$129,022 ","$10,751 ","$2,481 ",$62.03 ,Data Engineer
-Virginia,"$128,779 ","$10,731 ","$2,476 ",$61.91 ,Data Engineer
-Illinois,"$128,739 ","$10,728 ","$2,475 ",$61.89 ,Data Engineer
-Maryland,"$126,548 ","$10,545 ","$2,433 ",$60.84 ,Data Engineer
-Nebraska,"$123,847 ","$10,320 ","$2,381 ",$59.54 ,Data Engineer
-Missouri,"$123,079 ","$10,256 ","$2,366 ",$59.17 ,Data Engineer
-California,"$122,739 ","$10,228 ","$2,360 ",$59.01 ,Data Engineer
-South Carolina,"$122,018 ","$10,168 ","$2,346 ",$58.66 ,Data Engineer
-Pennsylvania,"$121,037 ","$10,086 ","$2,327 ",$58.19 ,Data Engineer
-New Jersey,"$120,789 ","$10,065 ","$2,322 ",$58.07 ,Data Engineer
-Oklahoma,"$119,937 ","$9,994 ","$2,306 ",$57.66 ,Data Engineer
-Maine,"$119,873 ","$9,989 ","$2,305 ",$57.63 ,Data Engineer
-Wisconsin,"$119,622 ","$9,968 ","$2,300 ",$57.51 ,Data Engineer
-North Carolina,"$119,499 ","$9,958 ","$2,298 ",$57.45 ,Data Engineer
-New Hampshire,"$117,704 ","$9,808 ","$2,263 ",$56.59 ,Data Engineer
-Idaho,"$117,414 ","$9,784 ","$2,257 ",$56.45 ,Data Engineer
-Texas,"$116,624 ","$9,718 ","$2,242 ",$56.07 ,Data Engineer
-Kentucky,"$116,246 ","$9,687 ","$2,235 ",$55.89 ,Data Engineer
-Wyoming,"$115,837 ","$9,653 ","$2,227 ",$55.69 ,Data Engineer
-Minnesota,"$115,539 ","$9,628 ","$2,221 ",$55.55 ,Data Engineer
-Michigan,"$115,074 ","$9,589 ","$2,212 ",$55.32 ,Data Engineer
-New Mexico,"$114,888 ","$9,574 ","$2,209 ",$55.23 ,Data Engineer
-Indiana,"$114,306 ","$9,525 ","$2,198 ",$54.95 ,Data Engineer
-Ohio,"$112,306 ","$9,358 ","$2,159 ",$53.99 ,Data Engineer
-Arizona,"$111,943 ","$9,328 ","$2,152 ",$53.82 ,Data Engineer
-Connecticut,"$111,373 ","$9,281 ","$2,141 ",$53.55 ,Data Engineer
-Mississippi,"$110,592 ","$9,216 ","$2,126 ",$53.17 ,Data Engineer
-Iowa,"$110,454 ","$9,204 ","$2,124 ",$53.10 ,Data Engineer
-Montana,"$110,256 ","$9,188 ","$2,120 ",$53.01 ,Data Engineer
-Arkansas,"$109,854 ","$9,154 ","$2,112 ",$52.81 ,Data Engineer
-Alabama,"$108,879 ","$9,073 ","$2,093 ",$52.35 ,Data Engineer
-Utah,"$107,297 ","$8,941 ","$2,063 ",$51.59 ,Data Engineer
-Tennessee,"$107,220 ","$8,935 ","$2,061 ",$51.55 ,Data Engineer
-Kansas,"$104,131 ","$8,677 ","$2,002 ",$50.06 ,Data Engineer
-Georgia,"$101,430 ","$8,452 ","$1,950 ",$48.76 ,Data Engineer
-Louisiana,"$100,876 ","$8,406 ","$1,939 ",$48.50 ,Data Engineer
-West Virginia,"$93,478 ","$7,789 ","$1,797 ",$44.94 ,Data Engineer
-Florida,"$89,766 ","$7,480 ","$1,726 ",$43.16 ,Data Engineer
-New York,"$98,166 ","$8,180 ","$1,887 ",$47.20 ,Data Analyst
-Pennsylvania,"$89,890 ","$7,490 ","$1,728 ",$43.22 ,Data Analyst
-New Hampshire,"$87,898 ","$7,324 ","$1,690 ",$42.26 ,Data Analyst
-New Jersey,"$86,566 ","$7,213 ","$1,664 ",$41.62 ,Data Analyst
-Wyoming,"$85,631 ","$7,135 ","$1,646 ",$41.17 ,Data Analyst
-Washington,"$85,515 ","$7,126 ","$1,644 ",$41.11 ,Data Analyst
-Wisconsin,"$84,902 ","$7,075 ","$1,632 ",$40.82 ,Data Analyst
-Massachusetts,"$84,899 ","$7,074 ","$1,632 ",$40.82 ,Data Analyst
-Alaska,"$84,677 ","$7,056 ","$1,628 ",$40.71 ,Data Analyst
-Oregon,"$83,991 ","$6,999 ","$1,615 ",$40.38 ,Data Analyst
-Indiana,"$83,857 ","$6,988 ","$1,612 ",$40.32 ,Data Analyst
-North Dakota,"$83,837 ","$6,986 ","$1,612 ",$40.31 ,Data Analyst
-Hawaii,"$82,209 ","$6,850 ","$1,580 ",$39.52 ,Data Analyst
-Arizona,"$82,123 ","$6,843 ","$1,579 ",$39.48 ,Data Analyst
-New Mexico,"$81,613 ","$6,801 ","$1,569 ",$39.24 ,Data Analyst
-Colorado,"$81,074 ","$6,756 ","$1,559 ",$38.98 ,Data Analyst
-Minnesota,"$81,053 ","$6,754 ","$1,558 ",$38.97 ,Data Analyst
-Montana,"$80,886 ","$6,740 ","$1,555 ",$38.89 ,Data Analyst
-Nevada,"$80,065 ","$6,672 ","$1,539 ",$38.49 ,Data Analyst
-Alabama,"$79,876 ","$6,656 ","$1,536 ",$38.40 ,Data Analyst
-South Dakota,"$79,235 ","$6,602 ","$1,523 ",$38.09 ,Data Analyst
-Vermont,"$79,108 ","$6,592 ","$1,521 ",$38.03 ,Data Analyst
-Ohio,"$79,063 ","$6,588 ","$1,520 ",$38.01 ,Data Analyst
-Rhode Island,"$77,796 ","$6,483 ","$1,496 ",$37.40 ,Data Analyst
-Iowa,"$76,863 ","$6,405 ","$1,478 ",$36.95 ,Data Analyst
-Delaware,"$76,760 ","$6,396 ","$1,476 ",$36.90 ,Data Analyst
-Connecticut,"$76,617 ","$6,384 ","$1,473 ",$36.84 ,Data Analyst
-Virginia,"$75,872 ","$6,322 ","$1,459 ",$36.48 ,Data Analyst
-Mississippi,"$75,561 ","$6,296 ","$1,453 ",$36.33 ,Data Analyst
-Tennessee,"$75,487 ","$6,290 ","$1,451 ",$36.29 ,Data Analyst
-Utah,"$75,098 ","$6,258 ","$1,444 ",$36.11 ,Data Analyst
-Illinois,"$74,872 ","$6,239 ","$1,439 ",$36.00 ,Data Analyst
-Georgia,"$74,409 ","$6,200 ","$1,430 ",$35.77 ,Data Analyst
-Maryland,"$74,394 ","$6,199 ","$1,430 ",$35.77 ,Data Analyst
-California,"$74,169 ","$6,180 ","$1,426 ",$35.66 ,Data Analyst
-Nebraska,"$72,966 ","$6,080 ","$1,403 ",$35.08 ,Data Analyst
-Maine,"$72,629 ","$6,052 ","$1,396 ",$34.92 ,Data Analyst
-Missouri,"$72,093 ","$6,007 ","$1,386 ",$34.66 ,Data Analyst
-South Carolina,"$71,384 ","$5,948 ","$1,372 ",$34.32 ,Data Analyst
-Kansas,"$71,124 ","$5,927 ","$1,367 ",$34.19 ,Data Analyst
-Idaho,"$70,811 ","$5,900 ","$1,361 ",$34.04 ,Data Analyst
-Louisiana,"$70,765 ","$5,897 ","$1,360 ",$34.02 ,Data Analyst
-Oklahoma,"$70,662 ","$5,888 ","$1,358 ",$33.97 ,Data Analyst
-Texas,"$70,205 ","$5,850 ","$1,350 ",$33.75 ,Data Analyst
-North Carolina,"$69,910 ","$5,825 ","$1,344 ",$33.61 ,Data Analyst
-West Virginia,"$69,422 ","$5,785 ","$1,335 ",$33.38 ,Data Analyst
-Kentucky,"$67,321 ","$5,610 ","$1,294 ",$32.37 ,Data Analyst
-Michigan,"$67,165 ","$5,597 ","$1,291 ",$32.29 ,Data Analyst
-Florida,"$65,851 ","$5,487 ","$1,266 ",$31.66 ,Data Analyst
-Arkansas,"$63,890 ","$5,324 ","$1,228 ",$30.72 ,Data Analyst
-Washington,"$115,300 ","$9,608 ","$2,217 ",$55.43 ,Business Analyst
-Delaware,"$108,000 ","$9,000 ","$2,076 ",$51.92 ,Business Analyst
-Virginia,"$106,140 ","$8,845 ","$2,041 ",$51.03 ,Business Analyst
-Maryland,"$104,520 ","$8,710 ","$2,010 ",$50.25 ,Business Analyst
-New York,"$104,389 ","$8,699 ","$2,007 ",$50.19 ,Business Analyst
-Vermont,"$102,235 ","$8,519 ","$1,966 ",$49.15 ,Business Analyst
-Nebraska,"$102,077 ","$8,506 ","$1,963 ",$49.08 ,Business Analyst
-Oklahoma,"$98,854 ","$8,237 ","$1,901 ",$47.53 ,Business Analyst
-California,"$98,699 ","$8,224 ","$1,898 ",$47.45 ,Business Analyst
-Massachusetts,"$97,492 ","$8,124 ","$1,874 ",$46.87 ,Business Analyst
-Alaska,"$96,628 ","$8,052 ","$1,858 ",$46.46 ,Business Analyst
-Maine,"$96,141 ","$8,011 ","$1,848 ",$46.22 ,Business Analyst
-Pennsylvania,"$95,618 ","$7,968 ","$1,838 ",$45.97 ,Business Analyst
-Oregon,"$95,305 ","$7,942 ","$1,832 ",$45.82 ,Business Analyst
-North Dakota,"$95,265 ","$7,938 ","$1,832 ",$45.80 ,Business Analyst
-Idaho,"$94,604 ","$7,883 ","$1,819 ",$45.48 ,Business Analyst
-New Jersey,"$94,548 ","$7,879 ","$1,818 ",$45.46 ,Business Analyst
-Texas,"$94,139 ","$7,844 ","$1,810 ",$45.26 ,Business Analyst
-Colorado,"$93,523 ","$7,793 ","$1,798 ",$44.96 ,Business Analyst
-Hawaii,"$93,485 ","$7,790 ","$1,797 ",$44.95 ,Business Analyst
-Wisconsin,"$93,403 ","$7,783 ","$1,796 ",$44.91 ,Business Analyst
-New Hampshire,"$93,120 ","$7,760 ","$1,790 ",$44.77 ,Business Analyst
-Wyoming,"$91,400 ","$7,616 ","$1,757 ",$43.94 ,Business Analyst
-Nevada,"$91,366 ","$7,613 ","$1,757 ",$43.93 ,Business Analyst
-South Dakota,"$90,036 ","$7,503 ","$1,731 ",$43.29 ,Business Analyst
-Indiana,"$90,013 ","$7,501 ","$1,731 ",$43.28 ,Business Analyst
-Minnesota,"$89,950 ","$7,495 ","$1,729 ",$43.25 ,Business Analyst
-New Mexico,"$89,727 ","$7,477 ","$1,725 ",$43.14 ,Business Analyst
-Rhode Island,"$88,275 ","$7,356 ","$1,697 ",$42.44 ,Business Analyst
-Arizona,"$88,152 ","$7,346 ","$1,695 ",$42.38 ,Business Analyst
-Ohio,"$87,511 ","$7,292 ","$1,682 ",$42.07 ,Business Analyst
-Montana,"$86,823 ","$7,235 ","$1,669 ",$41.74 ,Business Analyst
-Connecticut,"$86,287 ","$7,190 ","$1,659 ",$41.48 ,Business Analyst
-Illinois,"$86,269 ","$7,189 ","$1,659 ",$41.48 ,Business Analyst
-Iowa,"$85,818 ","$7,151 ","$1,650 ",$41.26 ,Business Analyst
-Alabama,"$85,739 ","$7,144 ","$1,648 ",$41.22 ,Business Analyst
-Mississippi,"$85,536 ","$7,128 ","$1,644 ",$41.12 ,Business Analyst
-Tennessee,"$83,549 ","$6,962 ","$1,606 ",$40.17 ,Business Analyst
-Utah,"$83,487 ","$6,957 ","$1,605 ",$40.14 ,Business Analyst
-Missouri,"$83,310 ","$6,942 ","$1,602 ",$40.05 ,Business Analyst
-South Carolina,"$82,451 ","$6,870 ","$1,585 ",$39.64 ,Business Analyst
-North Carolina,"$80,749 ","$6,729 ","$1,552 ",$38.82 ,Business Analyst
-Kansas,"$80,533 ","$6,711 ","$1,548 ",$38.72 ,Business Analyst
-Georgia,"$79,873 ","$6,656 ","$1,536 ",$38.40 ,Business Analyst
-Louisiana,"$78,535 ","$6,544 ","$1,510 ",$37.76 ,Business Analyst
-Michigan,"$77,503 ","$6,458 ","$1,490 ",$37.26 ,Business Analyst
-Kentucky,"$77,431 ","$6,452 ","$1,489 ",$37.23 ,Business Analyst
-West Virginia,"$73,847 ","$6,153 ","$1,420 ",$35.50 ,Business Analyst
-Arkansas,"$73,616 ","$6,134 ","$1,415 ",$35.39 ,Business Analyst
-Florida,"$70,687 ","$5,890 ","$1,359 ",$33.98 ,Business Analyst
+New York,136172,11347,2618,65.47,Data Scientist
+Vermont,133828,11152,2573,64.34,Data Scientist
+California,131441,10953,2527,63.19,Data Scientist
+Maine,127644,10637,2454,61.37,Data Scientist
+Idaho,126275,10522,2428,60.71,Data Scientist
+Washington,125289,10440,2409,60.24,Data Scientist
+Pennsylvania,124713,10392,2398,59.96,Data Scientist
+Massachusetts,123188,10265,2369,59.23,Data Scientist
+Alaska,122407,10200,2353,58.85,Data Scientist
+New Jersey,121955,10162,2345,58.63,Data Scientist
+New Hampshire,121666,10138,2339,58.49,Data Scientist
+Oregon,121011,10084,2327,58.18,Data Scientist
+North Dakota,120890,10074,2324,58.12,Data Scientist
+Wisconsin,120117,10009,2309,57.75,Data Scientist
+Wyoming,119040,9920,2289,57.23,Data Scientist
+Hawaii,118595,9882,2280,57.02,Data Scientist
+Colorado,117956,9829,2268,56.71,Data Scientist
+Indiana,116954,9746,2249,56.23,Data Scientist
+Nevada,115741,9645,2225,55.64,Data Scientist
+New Mexico,115421,9618,2219,55.49,Data Scientist
+Minnesota,115258,9604,2216,55.41,Data Scientist
+Arizona,114536,9544,2202,55.07,Data Scientist
+South Dakota,114254,9521,2197,54.93,Data Scientist
+Montana,112811,9400,2169,54.24,Data Scientist
+Ohio,112255,9354,2158,53.97,Data Scientist
+Rhode Island,112085,9340,2155,53.89,Data Scientist
+Delaware,111877,9323,2151,53.79,Data Scientist
+Alabama,111402,9283,2142,53.56,Data Scientist
+Virginia,110662,9221,2128,53.2,Data Scientist
+Connecticut,109897,9158,2113,52.84,Data Scientist
+Iowa,109690,9140,2109,52.74,Data Scientist
+Illinois,108858,9071,2093,52.34,Data Scientist
+Mississippi,108712,9059,2090,52.27,Data Scientist
+Maryland,108449,9037,2085,52.14,Data Scientist
+Tennessee,107174,8931,2061,51.53,Data Scientist
+Utah,106899,8908,2055,51.39,Data Scientist
+Nebraska,106424,8868,2046,51.17,Data Scientist
+Missouri,105000,8750,2019,50.48,Data Scientist
+South Carolina,103937,8661,1998,49.97,Data Scientist
+Georgia,103779,8648,1995,49.89,Data Scientist
+Oklahoma,103063,8588,1981,49.55,Data Scientist
+Texas,102927,8577,1979,49.48,Data Scientist
+Kansas,102344,8528,1968,49.2,Data Scientist
+North Carolina,101792,8482,1957,48.94,Data Scientist
+Louisiana,100631,8385,1935,48.38,Data Scientist
+Kentucky,97776,8148,1880,47.01,Data Scientist
+Michigan,97737,8144,1879,46.99,Data Scientist
+West Virginia,96317,8026,1852,46.31,Data Scientist
+Arkansas,92891,7740,1786,44.66,Data Scientist
+Florida,91843,7653,1766,44.16,Data Scientist
+Oregon,149704,12475,2878,71.97,Data Engineer
+Alaska,148968,12414,2864,71.62,Data Engineer
+North Dakota,148944,12412,2864,71.61,Data Engineer
+Massachusetts,147166,12263,2830,70.75,Data Engineer
+Hawaii,145799,12149,2803,70.1,Data Engineer
+Washington,142449,11870,2739,68.49,Data Engineer
+Nevada,140850,11737,2708,67.72,Data Engineer
+South Dakota,140768,11730,2707,67.68,Data Engineer
+Colorado,139003,11583,2673,66.83,Data Engineer
+Rhode Island,138661,11555,2666,66.66,Data Engineer
+New York,132125,11010,2540,63.52,Data Engineer
+Delaware,130669,10889,2512,62.82,Data Engineer
+Vermont,129022,10751,2481,62.03,Data Engineer
+Virginia,128779,10731,2476,61.91,Data Engineer
+Illinois,128739,10728,2475,61.89,Data Engineer
+Maryland,126548,10545,2433,60.84,Data Engineer
+Nebraska,123847,10320,2381,59.54,Data Engineer
+Missouri,123079,10256,2366,59.17,Data Engineer
+California,122739,10228,2360,59.01,Data Engineer
+South Carolina,122018,10168,2346,58.66,Data Engineer
+Pennsylvania,121037,10086,2327,58.19,Data Engineer
+New Jersey,120789,10065,2322,58.07,Data Engineer
+Oklahoma,119937,9994,2306,57.66,Data Engineer
+Maine,119873,9989,2305,57.63,Data Engineer
+Wisconsin,119622,9968,2300,57.51,Data Engineer
+North Carolina,119499,9958,2298,57.45,Data Engineer
+New Hampshire,117704,9808,2263,56.59,Data Engineer
+Idaho,117414,9784,2257,56.45,Data Engineer
+Texas,116624,9718,2242,56.07,Data Engineer
+Kentucky,116246,9687,2235,55.89,Data Engineer
+Wyoming,115837,9653,2227,55.69,Data Engineer
+Minnesota,115539,9628,2221,55.55,Data Engineer
+Michigan,115074,9589,2212,55.32,Data Engineer
+New Mexico,114888,9574,2209,55.23,Data Engineer
+Indiana,114306,9525,2198,54.95,Data Engineer
+Ohio,112306,9358,2159,53.99,Data Engineer
+Arizona,111943,9328,2152,53.82,Data Engineer
+Connecticut,111373,9281,2141,53.55,Data Engineer
+Mississippi,110592,9216,2126,53.17,Data Engineer
+Iowa,110454,9204,2124,53.1,Data Engineer
+Montana,110256,9188,2120,53.01,Data Engineer
+Arkansas,109854,9154,2112,52.81,Data Engineer
+Alabama,108879,9073,2093,52.35,Data Engineer
+Utah,107297,8941,2063,51.59,Data Engineer
+Tennessee,107220,8935,2061,51.55,Data Engineer
+Kansas,104131,8677,2002,50.06,Data Engineer
+Georgia,101430,8452,1950,48.76,Data Engineer
+Louisiana,100876,8406,1939,48.5,Data Engineer
+West Virginia,93478,7789,1797,44.94,Data Engineer
+Florida,89766,7480,1726,43.16,Data Engineer
+New York,98166,8180,1887,47.2,Data Analyst
+Pennsylvania,89890,7490,1728,43.22,Data Analyst
+New Hampshire,87898,7324,1690,42.26,Data Analyst
+New Jersey,86566,7213,1664,41.62,Data Analyst
+Wyoming,85631,7135,1646,41.17,Data Analyst
+Washington,85515,7126,1644,41.11,Data Analyst
+Wisconsin,84902,7075,1632,40.82,Data Analyst
+Massachusetts,84899,7074,1632,40.82,Data Analyst
+Alaska,84677,7056,1628,40.71,Data Analyst
+Oregon,83991,6999,1615,40.38,Data Analyst
+Indiana,83857,6988,1612,40.32,Data Analyst
+North Dakota,83837,6986,1612,40.31,Data Analyst
+Hawaii,82209,6850,1580,39.52,Data Analyst
+Arizona,82123,6843,1579,39.48,Data Analyst
+New Mexico,81613,6801,1569,39.24,Data Analyst
+Colorado,81074,6756,1559,38.98,Data Analyst
+Minnesota,81053,6754,1558,38.97,Data Analyst
+Montana,80886,6740,1555,38.89,Data Analyst
+Nevada,80065,6672,1539,38.49,Data Analyst
+Alabama,79876,6656,1536,38.4,Data Analyst
+South Dakota,79235,6602,1523,38.09,Data Analyst
+Vermont,79108,6592,1521,38.03,Data Analyst
+Ohio,79063,6588,1520,38.01,Data Analyst
+Rhode Island,77796,6483,1496,37.4,Data Analyst
+Iowa,76863,6405,1478,36.95,Data Analyst
+Delaware,76760,6396,1476,36.9,Data Analyst
+Connecticut,76617,6384,1473,36.84,Data Analyst
+Virginia,75872,6322,1459,36.48,Data Analyst
+Mississippi,75561,6296,1453,36.33,Data Analyst
+Tennessee,75487,6290,1451,36.29,Data Analyst
+Utah,75098,6258,1444,36.11,Data Analyst
+Illinois,74872,6239,1439,36,Data Analyst
+Georgia,74409,6200,1430,35.77,Data Analyst
+Maryland,74394,6199,1430,35.77,Data Analyst
+California,74169,6180,1426,35.66,Data Analyst
+Nebraska,72966,6080,1403,35.08,Data Analyst
+Maine,72629,6052,1396,34.92,Data Analyst
+Missouri,72093,6007,1386,34.66,Data Analyst
+South Carolina,71384,5948,1372,34.32,Data Analyst
+Kansas,71124,5927,1367,34.19,Data Analyst
+Idaho,70811,5900,1361,34.04,Data Analyst
+Louisiana,70765,5897,1360,34.02,Data Analyst
+Oklahoma,70662,5888,1358,33.97,Data Analyst
+Texas,70205,5850,1350,33.75,Data Analyst
+North Carolina,69910,5825,1344,33.61,Data Analyst
+West Virginia,69422,5785,1335,33.38,Data Analyst
+Kentucky,67321,5610,1294,32.37,Data Analyst
+Michigan,67165,5597,1291,32.29,Data Analyst
+Florida,65851,5487,1266,31.66,Data Analyst
+Arkansas,63890,5324,1228,30.72,Data Analyst
+Washington,115300,9608,2217,55.43,Business Analyst
+Delaware,108000,9000,2076,51.92,Business Analyst
+Virginia,106140,8845,2041,51.03,Business Analyst
+Maryland,104520,8710,2010,50.25,Business Analyst
+New York,104389,8699,2007,50.19,Business Analyst
+Vermont,102235,8519,1966,49.15,Business Analyst
+Nebraska,102077,8506,1963,49.08,Business Analyst
+Oklahoma,98854,8237,1901,47.53,Business Analyst
+California,98699,8224,1898,47.45,Business Analyst
+Massachusetts,97492,8124,1874,46.87,Business Analyst
+Alaska,96628,8052,1858,46.46,Business Analyst
+Maine,96141,8011,1848,46.22,Business Analyst
+Pennsylvania,95618,7968,1838,45.97,Business Analyst
+Oregon,95305,7942,1832,45.82,Business Analyst
+North Dakota,95265,7938,1832,45.8,Business Analyst
+Idaho,94604,7883,1819,45.48,Business Analyst
+New Jersey,94548,7879,1818,45.46,Business Analyst
+Texas,94139,7844,1810,45.26,Business Analyst
+Colorado,93523,7793,1798,44.96,Business Analyst
+Hawaii,93485,7790,1797,44.95,Business Analyst
+Wisconsin,93403,7783,1796,44.91,Business Analyst
+New Hampshire,93120,7760,1790,44.77,Business Analyst
+Wyoming,91400,7616,1757,43.94,Business Analyst
+Nevada,91366,7613,1757,43.93,Business Analyst
+South Dakota,90036,7503,1731,43.29,Business Analyst
+Indiana,90013,7501,1731,43.28,Business Analyst
+Minnesota,89950,7495,1729,43.25,Business Analyst
+New Mexico,89727,7477,1725,43.14,Business Analyst
+Rhode Island,88275,7356,1697,42.44,Business Analyst
+Arizona,88152,7346,1695,42.38,Business Analyst
+Ohio,87511,7292,1682,42.07,Business Analyst
+Montana,86823,7235,1669,41.74,Business Analyst
+Connecticut,86287,7190,1659,41.48,Business Analyst
+Illinois,86269,7189,1659,41.48,Business Analyst
+Iowa,85818,7151,1650,41.26,Business Analyst
+Alabama,85739,7144,1648,41.22,Business Analyst
+Mississippi,85536,7128,1644,41.12,Business Analyst
+Tennessee,83549,6962,1606,40.17,Business Analyst
+Utah,83487,6957,1605,40.14,Business Analyst
+Missouri,83310,6942,1602,40.05,Business Analyst
+South Carolina,82451,6870,1585,39.64,Business Analyst
+North Carolina,80749,6729,1552,38.82,Business Analyst
+Kansas,80533,6711,1548,38.72,Business Analyst
+Georgia,79873,6656,1536,38.4,Business Analyst
+Louisiana,78535,6544,1510,37.76,Business Analyst
+Michigan,77503,6458,1490,37.26,Business Analyst
+Kentucky,77431,6452,1489,37.23,Business Analyst
+West Virginia,73847,6153,1420,35.5,Business Analyst
+Arkansas,73616,6134,1415,35.39,Business Analyst
+Florida,70687,5890,1359,33.98,Business Analyst
 Washington,164857,13738,3170,79.26,Data Architect
 Delaware,132676,11056,2551,63.79,Data Architect
 Virginia,144308,12026,2775,69.38,Data Architect
