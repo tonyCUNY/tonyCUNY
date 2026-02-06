@@ -1,0 +1,102 @@
+---
+title: "Data_607_Project_2_Dataset_2"
+author: "CHUN SHING LEUNG"
+date: "2023-10-15"
+output: html_document
+---
+
+## Loading the dataset
+
+The Second data set is NYPD Arrest Data in 2023 from NYC database.
+https://data.cityofnewyork.us/Public-Safety/NYPD-Arrest-Data-Year-to-Date-/uip8-fykc
+
+How's the number of arrest disturb among race, age and sex? Is there a peak month?
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(lubridate)
+
+ny_arrest <- read_csv("https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/NYPD_Arrest_Data__Year_to_Date__20231014.csv")
+
+glimpse(ny_arrest)
+
+```
+## Data cleaning and transformation
+
+```{r}
+# drop all rows with NA value
+# select column: ARREST_DATE, PD_DESC, AGE_GROUP, PERP_SEX, PERP_RACE, 
+# create a new column and transform ARREST_DATE into month
+
+ny_arrest2 <- ny_arrest |> 
+                  drop_na() |> 
+                  select(c(ARREST_DATE, PD_DESC, AGE_GROUP, PERP_SEX, PERP_RACE)) |>
+                  mutate(MONTH = month(as.Date(ARREST_DATE, format = "%m/%d/%Y"))) |> 
+                  relocate(MONTH, .after = ARREST_DATE)
+
+head(ny_arrest2)
+
+# 
+
+```
+
+
+## Summary for number of arrest by month, sex
+
+```{r warning=FALSE, message=FALSE}
+
+arrest_count <- ny_arrest2 |> 
+                    group_by(PERP_RACE, AGE_GROUP, PERP_SEX) |> 
+                    summarise(COUNT = n())
+arrest_count
+
+month_arrest_count <- ny_arrest2 |> 
+                      group_by(MONTH, PERP_RACE, AGE_GROUP, PERP_SEX) |> 
+                      summarise(COUNT = n())
+month_arrest_count
+
+write.csv(month_arrest_count, "C:\\Users\\tonyl\\Desktop\\CUNY\\arrest_count.csv", row.names = FALSE)
+
+# 
+
+```
+
+## Visualize the data
+
+No of arrest over different variable: PERP_RACE, AGE_GROUP, PERP_SEX AND MONTH
+25-44 Age group has the highest number of arrest.
+Mostly male are being arrested.
+Black and white Hispanic have higher number of arrest. 
+Each month has about the same number of arrest.
+
+```{r warning=FALSE, message=FALSE}
+
+# No of arrest by PERP_RACE AND MONTH
+ny_arrest2 |> 
+      group_by(PERP_RACE, MONTH) |> 
+      summarise(COUNT = n()) |>
+      ggplot(aes(x = MONTH, y = COUNT, fill = PERP_RACE)) +
+      geom_bar(stat = "identity", position = "dodge") +
+      labs(title = "Number of Arrests by PERP_RACE and MONTH", x = "MONTH", y = "Number of Arrests", fill = "PERP_RACE")
+
+# No of arrest by PERP_RACE AND AGE_GROUP
+ny_arrest2 |> 
+      group_by(AGE_GROUP, PERP_RACE) |> 
+      summarise(COUNT = n()) |>
+      ggplot(aes(x = reorder(PERP_RACE, COUNT), y = COUNT, fill = AGE_GROUP)) +
+      geom_bar(stat = "identity") + 
+      coord_flip() +
+      labs(title = "Number of Arrests by PERP_RACE", x = "PERP_RACE", y = "Number of Arrests")
+
+# No of arrest by AGE_GROUP AND PERP_SEX
+ny_arrest2 |> 
+      group_by(PERP_SEX, AGE_GROUP) |> 
+      summarise(COUNT = n()) |>
+      ggplot(aes(x = reorder(AGE_GROUP, COUNT), y = COUNT, fill = PERP_SEX)) +
+      geom_bar(stat = "identity") + 
+      coord_flip() +
+      labs(title = "Number of Arrests by AGE_GROUP", x = "AGE_GROUP", y = "Number of Arrests")
+
+```
+
+
