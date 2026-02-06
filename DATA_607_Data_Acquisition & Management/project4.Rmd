@@ -1,0 +1,202 @@
+---
+title: 'Project 4: Document Classification'
+author: "CHUN SHING LEUNG"
+date: "2023-11-24"
+output: html_document
+---
+
+It can be useful to be able to classify new "test" documents using already classified "training" documents.  A common example is using a corpus of labeled spam and ham (non-spam) e-mails to predict whether or not a new document is spam.
+
+
+For this project, you can start with a spam/ham dataset, then predict the class of new documents (either withheld from the training dataset or from another source such as your own spam folder).   One example corpus:   https://spamassassin.apache.org/old/publiccorpus/
+
+## Library
+
+The following library will be used.
+
+```{r warning=FALSE, message=FALSE}
+library(tm)
+library(tidyverse)
+library(tidytext)
+library(naivebayes)
+library(SnowballC)
+library(wordcloud)
+library(gmodels)
+library(caret) 
+```
+
+## Loading the dataset
+
+The following datasets are downloaded and unziped on local folder
+https://spamassassin.apache.org/old/publiccorpus/20030228_easy_ham.tar.bz2
+https://spamassassin.apache.org/old/publiccorpus/20050311_spam_2.tar.bz2
+
+There are 2500 ham and 1396 spam messages
+
+```{r warning=FALSE, message=FALSE}
+spam_dir = "C:\\Users\\tonyl\\OneDrive\\Desktop\\CUNY\\DATA 607 Data Acquisition & Management\\Project 4\\Spamham\\spam_2\\spam_2"
+ham_dir = "C:\\Users\\tonyl\\OneDrive\\Desktop\\CUNY\\DATA 607 Data Acquisition & Management\\Project 4\\Spamham\\easy_ham\\easy_ham"
+
+# The following function will read each file under spam or ham folder.
+# "list.files()" get the names of the files in the folder, excluding "cmds" 
+# The "lapply()" read each file into a data frame with two column: file and text.
+# Use do.call function to call rbind function
+# rbind function is used to combine data frames into a single data frame
+# added class column to indicate if the email is spam or ham
+
+read_files <- function(folder_path, class) {
+  files <- list.files(path = folder_path, full.names = TRUE, , recursive = TRUE)
+  files <- files[!grepl("cmds", files)]
+  df_list <- lapply(files, function(file) {
+    data.frame(file = file, text = paste(readLines(file), collapse = "\n"))
+  })
+  combined_df <- do.call(rbind, df_list)
+  combined_df$class <- class
+  return(combined_df)
+}
+
+
+spam <- read_files(spam_dir, class="spam")
+ham <- read_files(ham_dir, class="ham") 
+df <- rbind(spam, ham)
+table(df$class)
+
+```
+
+## Raw Data cleaning
+
+There are three columns in email: file, text and class.
+We shall clean the raw data before building corpus
+
+```{r warning=FALSE, message=FALSE}
+
+# Remove file column
+# Remove html body language
+# Remove punctuation
+# Remove "/n"
+df_clean <- df |>
+              select(-file) |> 
+              mutate(text = gsub("<.*?>", "", text)) |> 
+              mutate(text = gsub("\\d+", "", text)) |>
+              mutate(text = gsub("[[:punct:]]+", "", text)) |> 
+              mutate(text = gsub("[\n]", "", text))
+
+
+```
+
+# Building Corpus and further data processing
+
+A corpus is created and further data clean up is performed.
+
+```{r warning=FALSE, message=FALSE}
+
+df_v_corp <- Corpus(VectorSource(df_clean$text))
+
+
+# Converting to lowercase
+# Remove Numbers, Punctuation, stopwords, whitespace
+# Applying stemming
+df_v_corp <- df_v_corp |>
+                      tm_map(tolower) |>
+                      tm_map(removeNumbers) |>                        
+                      tm_map(removePunctuation) |>                    
+                      tm_map(removeWords, stopwords("en")) |>         
+                      tm_map(stripWhitespace) |>                    
+                      tm_map(stemDocument)
+
+
+```
+
+```{r warning=FALSE, message=FALSE}
+# Visualizing cleaned corpus
+
+wordcloud(df_v_corp, max.words = 100, colors = brewer.pal(7, "Dark2"), random.order = FALSE)
+
+```
+
+## Creating a sparse document-term 
+
+```{r warning=FALSE, message=FALSE}
+
+df_dtm <- DocumentTermMatrix(df_v_corp)
+
+df_dtm
+
+```
+## Remove Sparse Terms
+
+Removing sparse terms help to decrease difficulty on training Naive Bayes model 
+
+```{r warning=FALSE, message=FALSE}
+
+df_dtm_rst <- removeSparseTerms(df_dtm, sparse = .995)
+
+df_dtm_rst
+
+```
+
+## Creating training sets
+
+```{r warning=FALSE, message=FALSE}
+
+# Create training and testing datasets
+
+set.seed(121)
+
+sample_size <- floor(0.70 * nrow(df_dtm_rst))
+train_ind <- sample(nrow(df_dtm_rst), size = sample_size)
+train <- df_dtm_rst[train_ind,]
+test <- df_dtm_rst[-train_ind,]
+train_labels <- df[train_ind, ]$class
+test_labels <- df[-train_ind, ]$class
+
+# Proportion for training & test labels
+# Spam messages were allocated evenly in both training and test datasets.
+# Both datasets have about 35% spam
+
+prop.table(table(train_labels))
+prop.table(table(test_labels))
+
+
+```
+## Naive Bayes model
+
+```{r warning=FALSE, message=FALSE}
+
+# Convert counts to Yes/No strings
+
+convert_values <- function(x) {
+  x <- ifelse(x > 0, "Yes", "No")
+}
+
+# Convert the training and test matrices
+
+email_train <- apply(train, MARGIN = 2,
+                   convert_values)
+email_test <- apply(test, MARGIN = 2,
+                  convert_values)
+
+# Training the Naive Bayes model
+
+email_classifier <- naive_bayes(email_train, train_labels)
+
+```
+
+## The prediction
+
+```{r warning=FALSE, message=FALSE}
+
+email_test_pred <- predict(email_classifier, email_test)
+
+```
+
+
+# Confusion matrix and Conclusion
+
+The accuracy of this mode is 97.43%. 
+
+```{r warning=FALSE, message=FALSE}
+confusionMatrix(data = as.factor(email_test_pred), reference = as.factor(test_labels),
+                positive = "spam", dnn = c("Prediction", "Actual"))
+
+```
