@@ -1,0 +1,276 @@
+---
+title: "Final Project"
+author: "CHUN SHING LEUNG"
+date: "2023-12-10"
+output: html_document
+---
+
+## Introduction
+
+Sentiment analysis involves using natural language processing and machine learning techniques to identify and extract subjective information from text data. The main goal of my project is to practice my knowledge of Web API, data cleaning, sentiment analysis, and data visualization.
+
+The Rotten Tomatoes datasets were collected from Kaggle, and reviews were extracted via the Themoviedb API. The project aims to answer two questions:
+
+1. Will movie categories affect viewer reviews?
+
+2.What are the most common words for each category?
+
+Additionally, the reviews from The Movie db will be compared with Rotten Tomatoes reviews.
+
+## Library
+
+```{r  warning=FALSE, message=FALSE}
+library("tidyverse")
+library("janeaustenr")
+library("stringr")
+library("tidytext")
+library(tidyverse)
+library(jsonlite)
+library(httr)
+library(wordcloud)
+library(reshape2)
+
+```
+
+## Loading the dataset
+
+The Rotten Tomatoes dataset was collected from Kaggle and downloaded to a local directory. You can find the datasets at https://www.kaggle.com/datasets/stefanoleone992/rotten-tomatoes-movies-and-critic-reviews-dataset.
+
+The dataset has been scraped from the publicly available website https://www.rottentomatoes.com as of 2020-10-31.
+
+
+```{r  warning=FALSE, message=FALSE}
+
+movies <- read_csv("C:\\Users\\tonyl\\OneDrive\\Documents\\fina_project\\rotten_tomatoes_movies.csv")
+reviews <- read_csv("C:\\Users\\tonyl\\OneDrive\\Documents\\fina_project\\rotten_tomatoes_critic_reviews.csv")
+
+head(movies)
+head(reviews)
+
+```
+
+## Tidy the Data
+
+The dataset consists of two CSV files, which are imported as “reviews” and “movies”. “reviews” contains the review content, and “movies” contains the movie title. 
+Two data frames can be merged based on the common column “rotten_tomatoes_link”.
+
+```{r  warning=FALSE, message=FALSE}
+
+# Extract columns that will be used
+# Merge two datasets
+# Remove rows contains NA value
+# Drop rotten_tomatoes_link column
+# Preparing a new set of data frame so Genres column are broken down by genres value.
+
+review_2 <- reviews |> 
+                  select(rotten_tomatoes_link, review_content) 
+movies_2 <- movies |> 
+                  select(rotten_tomatoes_link, movie_title, audience_rating, genres)
+
+merged <- merge(movies_2, review_2, by = "rotten_tomatoes_link")
+
+merged <- merged |> 
+            na.omit() |> 
+            select(-rotten_tomatoes_link)
+
+merged_genres <- merged |> 
+                    separate_rows(genres, sep = ",\\s*") 
+
+head(merged_genres)
+
+```
+## Sentiment Analysis
+
+First, we tokenize the cleaned data in “merge_genres”. Then, we use the AFINN lexicon to determine the sentiment score. Two results are obtained: one by movie title and one by genre.
+
+```{r  warning=FALSE, message=FALSE}
+
+merged_tokens <- merged_genres |> 
+                  unnest_tokens(output = "word", token = "words", input = review_content) |> 
+                  anti_join(stop_words)
+
+# The afinn lexicon
+m_afinn_by_movie  <- merged_tokens |> 
+                        inner_join(get_sentiments("afinn")) |> 
+                        group_by(movie_title, audience_rating) |> 
+                        summarise(sentiment = sum(value)) |> 
+                        arrange(desc(sentiment))
+m_afinn_by_movie
+
+m_afinn_by_genres <- merged_tokens |> 
+                        inner_join(get_sentiments("afinn")) |> 
+                        group_by(genres) |> 
+                        summarise(sentiment = sum(value)) |> 
+                        arrange(desc(sentiment))
+m_afinn_by_genres
+
+```
+
+
+**Will movie categories affect viewer reviews?**
+
+Yes. Viewers usually use positive words for categories such as Comedy and Drama, and negative words for categories such as Horror.
+
+**What are the most common words for each category?**
+
+We picked 5 genres to generate the most common words. From the charts, we can see that “fun” and “love” are the most common positive words. However, “funny” is the most common negative word among these genres. One possible reason is that viewers are giving sarcastic reviews.
+
+```{r  warning=FALSE, message=FALSE}
+
+# Sentiment score sort by Genres
+
+ggplot(m_afinn_by_genres, aes(x = reorder(genres, sentiment), y = sentiment)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(x = "Genres", y = "Sentiment Score") +
+  coord_flip()
+
+# Most common positive and negative words for all movie reviews
+# Bing Lexicon is used here
+
+bing_word_counts <- merged_tokens |> 
+  inner_join(get_sentiments("bing")) |> 
+  count(word, sentiment, sort = TRUE) |> 
+  ungroup()
+
+bing_word_counts
+
+bing_word_counts |> 
+  group_by(sentiment) |> 
+  top_n(10) |> 
+  ungroup() |> 
+  mutate(word = reorder(word, n)) |> 
+  ggplot(aes(word, n, fill = sentiment)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~sentiment, scales = "free_y") +
+  labs(
+    y = "Contribution to sentiment",
+    x = NULL
+  ) +
+  coord_flip()
+
+# World Cloud 
+merged_tokens |> 
+  inner_join(get_sentiments("bing")) |> 
+  count(word, sentiment, sort = TRUE) |> 
+  acast(word ~ sentiment, value.var = "n", fill = 0) |> 
+  comparison.cloud(colors = c("gray20", "gray80"),max.words = 100)
+
+# Most common positive and negative words for by Genres
+
+bing_word_counts2 <- merged_tokens |> 
+  inner_join(get_sentiments("bing")) |>
+  group_by(genres) |> 
+  count(word, sentiment, sort = TRUE) 
+
+bing_word_counts2
+
+genres_list <- c("Comedy", "Drama", "Romance", "Horror", "Documentary")
+
+for (genre in genres_list) {
+  word_count1 <- bing_word_counts2 %>%
+    filter(genres == genre) %>%
+    group_by(sentiment) %>%
+    top_n(10) %>%
+    ungroup() %>%
+    mutate(word = reorder(word, n))
+  
+  plot <- ggplot(word_count1, aes(x = word, y = n, fill = sentiment)) +
+    geom_col(show.legend = FALSE) +
+    facet_wrap(~sentiment, scales = "free_y") +
+    labs(
+      y = "Contribution to sentiment",
+      x = NULL,
+      title = paste("Top 10 Words by Genre:", genre)
+    ) +
+    coord_flip()
+  
+  print(plot)
+}
+
+```
+
+
+
+
+## Comparing with The Movie db
+
+The Movie db API is used to extract reviews for “Spider-Man: Into the Spider-Verse”. The data will be tokenized, and the most common negative and positive words will be found.
+
+“Marvel” is the most common positive word among the two data sources. “Plot” is the most common negative word among the two data sources.
+
+One drawback is that the number of reviews from the Movie db API is only 53, and each common frequency is mostly 1. This will not be statistically significant.
+
+
+```{r  warning=FALSE, message=FALSE}
+
+api_key <- "7ebae80cdd0ab879679dc189866bf7ed"
+movie_id <- 324857 # Spider-Man: Into the Spider-Verse
+url <- paste0("https://api.themoviedb.org/3/movie/", movie_id, "/reviews?api_key=", api_key)
+response <- GET(url)
+reviews2 <- content(response, "text")
+text_content <- content(response, as = "text")
+
+data <- fromJSON(text_content)
+df <- as.data.frame(data)
+
+df_review <- df |> 
+              select(results.content)
+
+df_review_tokens <- df_review |> 
+                        unnest_tokens(output = "word", token = "words", input = results.content) |> 
+                        anti_join(stop_words)
+
+df_word_counts <- df_review_tokens |>
+                        inner_join(get_sentiments("bing")) |>
+                        count(word, sentiment, sort = TRUE) 
+
+df_word_counts_plot <- df_word_counts |> 
+                        group_by(sentiment) |> 
+                        ungroup() |> 
+                        mutate(word = reorder(word, n)) |> 
+                        ggplot(aes(word, n, fill = sentiment)) +
+                        geom_col(show.legend = FALSE) +
+                        facet_wrap(~sentiment, scales = "free_y") +
+                        labs(
+                          y = "Spider-Man: Into the Spider-Verse",
+                          x = NULL
+                        ) +
+                        coord_flip()
+
+# Most common positive and negative words for "Spider-Man: Into the Spider-Verse"
+
+bing_word_counts3 <- merged_tokens |>
+                        filter(movie_title == "Spider-Man: Into the Spider-Verse") |> 
+                        inner_join(get_sentiments("bing")) |>
+                        count(word, sentiment, sort = TRUE) 
+
+bing_word_counts3
+
+Spider_plot <- bing_word_counts3 |> 
+                        group_by(sentiment) |> 
+                        top_n(10) |> 
+                        ungroup() |> 
+                        mutate(word = reorder(word, n)) |> 
+                        ggplot(aes(word, n, fill = sentiment)) +
+                        geom_col(show.legend = FALSE) +
+                        facet_wrap(~sentiment, scales = "free_y") +
+                        labs(
+                          y = "Spider-Man: Into the Spider-Verse",
+                          x = NULL
+                        ) +
+                        coord_flip()
+
+Spider_plot
+df_word_counts
+df_word_counts_plot
+
+```
+
+## Conculsion
+
+By using the AFINN and Bing lexicons, we found out that different relaxing movie categories, such as Comedy, usually have a positive sentiment score. “Fun” and “love” are the most common positive words.
+
+Reviews from Movie DB can also be extracted and undergo the same sentiment analysis.
+
+
+
