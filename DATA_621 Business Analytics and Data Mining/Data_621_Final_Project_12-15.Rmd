@@ -1,0 +1,777 @@
+---
+title: "Data 621 Final Project"
+author: "Mohamed Hassan-El Serafi, Chun Shing Leung, Eddie Xu, Keith Colella, Yina
+  Qiao"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message=FALSE, warning = FALSE)
+```
+
+```{r}
+library(tidyverse)
+library(caret)
+library(MASS)
+library(kableExtra)
+library(DataExplorer)
+library(skimr)
+library(psych)
+library(forcats)
+library(gridExtra)
+library(outliers)
+library(reactable)
+library(ROSE)
+library(mlogit)
+library(ggplot2)
+library(cowplot)
+library(randomForest)
+library(car)
+library(pROC)
+library(reshape2)
+library(visdat)
+library(pscl)
+```
+
+```{r}
+set.seed(1234)
+```
+
+
+The data set is from Kaggle:
+https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset
+
+```{r}
+mydata<- read.csv("https://raw.githubusercontent.com/tonyCUNY/DATA_621/refs/heads/main/heart.csv")
+```
+
+
+```{r}
+reactable(mydata)
+```
+
+## EDA - Exploratory Data Analysis
+
+Attribute Information:
+age
+sex
+chest pain type (4 values)
+resting blood pressure
+serum cholesterol in mg/dl
+fasting blood sugar > 120 mg/dl
+resting electrocardiographic results (values 0,1,2)
+maximum heart rate achieved
+exercise induced angina
+oldpeak = ST depression induced by exercise relative to rest
+the slope of the peak exercise ST segment
+number of major vessels (0-3) colored by flourosopy
+thal: 0 = normal; 1 = fixed defect; 2 = reversible defect
+
+
+```{r}
+# Descriptive statistics
+str(mydata)
+```
+
+```{r}
+glimpse(mydata)
+```
+
+
+```{r}
+mydata %>%
+  summary() %>%
+  kable() %>%
+  kable_styling()
+```
+
+
+```{r}
+skim(mydata)
+```
+
+```{r}
+#Transform the variables as factor and numeric
+mydata.clean <- mydata %>%
+  mutate(
+    sex = factor(ifelse(sex == 0, "F", "M")),
+    age = as.numeric(age),
+    trestbps = as.numeric(trestbps),
+    chol = as.numeric(chol),
+    thalach = as.numeric(thalach),
+    cp = as.factor(cp),
+    fbs = as.factor(fbs),
+    restecg = as.factor(restecg),
+    exang = factor(ifelse(exang == 0, "no", "yes")),
+    slope = as.factor(slope),
+    ca = as.factor(as.integer(ca)),
+    thal = as.factor(as.integer(thal)),
+    target = factor(ifelse(target == 0, "No_Disease", "Disease"))
+  )
+```
+
+```{r}
+# Renaming columns
+mydata.clean <- mydata.clean %>%
+  rename(fasting_blood_sugar= fbs,
+         exercise_induced_angina = exang,
+         chest_pain = cp,
+         resting_blood_pressure = trestbps,
+         vessels_colored = ca,
+         max_heart_rate = thalach)
+```
+
+
+
+
+
+
+```{r}
+# Statistical summary
+summary(mydata.clean)
+```
+
+### Checking for Missing Value
+
+1. No Missing Value for both numeric and Categorical Variables
+
+
+```{r, echo=FALSE}
+num_vars <- mydata.clean %>% select_if(where(is.numeric))
+vis_miss(num_vars, cluster = TRUE) + 
+  ggtitle("Numeric Variables - No Missing Values") +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.margin = unit(c(1, 2, 1, 1), "cm")
+  )
+```
+
+```{r, echo=FALSE}
+cat_vars <- mydata.clean %>% select_if(~ is.factor(.))
+cat_vars <- cat_vars %>% 
+  mutate(across(everything(), ~na_if(as.character(.), "")))
+vis_miss(cat_vars, cluster = TRUE) +
+  ggtitle("Categorical Variables - No Missing Values") +
+  theme(
+    plot.title = element_text(face = "bold"),
+    plot.margin = unit(c(1, 2, 1, 1), "cm")
+  )
+```
+
+### Exploratory Plots of the Data
+
+```{r, warning=FALSE}
+
+cat_vars%>%
+  gather() %>%
+  ggplot(aes(value)) +
+  geom_bar(fill = "lightblue", color="grey") +
+  facet_wrap(~ key, scales = "free", ncol = 4) +
+  theme(
+    panel.grid = element_blank(), 
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  ) +
+  labs(title = "Bar Plots of Categorical Variables")
+
+```
+
+
+```{r data_explorer, warning=FALSE, message=FALSE}
+introduce(mydata.clean)
+
+# par on plots
+par(mfrow = c(1, 4))
+plot_intro(mydata.clean)
+describeBy(mydata.clean)
+plot_histogram(mydata.clean)
+plot_bar(mydata.clean)
+```
+
+
+
+
+
+
+
+
+```{r}
+plot_bar(mydata.clean, by = "target") 
+```
+
+
+
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+
+
+# Boxplot
+mydata %>%
+  gather() %>%
+  ggplot(aes(value)) +
+  facet_wrap(~ key, scales = "free") +
+  geom_boxplot(fill = "pink") +
+  labs(title = "Box & Histogram Plots of Numeric Variables", x = "Value", y = "Frequency")
+
+
+
+ggplot(gather(mydata), aes(value)) +
+  facet_wrap(~ key, scales = "free") +
+  geom_histogram(bins = 30, fill = "lightblue", color = "black")
+```
+
+
+
+The participants in the study are almost 70% male, and should be taken into consideration when used as an independent variable to predict heart disease:
+
+
+```{r}
+gender_data <- mydata.clean %>%
+  group_by(sex) %>%
+  summarise(sum_count = n()) %>%
+  mutate(percentage = (sum_count / sum(sum_count)) * 100)
+
+
+ggplot(gender_data, aes(x=factor(sex), y=sum_count, fill= factor(sex))) +
+  geom_bar(stat = "identity")+
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), size = 5, color = "white") + 
+  labs(title="Percentage of Male and Female Study Participants", x="Gender", y="Frequency", fill="Gender")+
+  scale_fill_manual(values= c("F" = "#CC79A7", "M"= "navyblue"), labels= c("Female", "Male"))+
+  theme(panel.background = element_blank())
+  #theme_bw()
+```
+
+
+
+
+
+
+
+
+
+```{r}
+ggplot(mydata.clean, aes(x=age, fill=factor(target))) +
+geom_histogram(bindwith = 4, position = "dodge", color = "black")+
+  xlim(0,100)+
+  ylim(0,80)+
+labs(title="Age Distribution of Participants With and Without Heart Disease", x="Age", y="Frequency", fill="Target Variable") +
+scale_fill_manual(values =c("No_Disease" = "blue", "Disease" = "red"), labels= c("Disease", "No Disease"))+
+facet_wrap(~target, scales = "free_y", labeller = labeller(target = 
+    c("No Disease" = "No Disease",
+      "Disease" = "Disease")))+
+  theme(panel.background = element_blank())
+```
+
+
+
+
+
+
+```{r}
+mydata.clean %>% 
+
+  group_by(chest_pain, target) %>% 
+
+  summarise(count = n()) %>% 
+
+  group_by(chest_pain) %>% 
+
+  mutate(percentage = (count / sum(count)) * 100) %>%
+
+ggplot(aes(x=chest_pain, y=count, fill= factor(target))) +
+  geom_bar(stat = "identity")+
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), size = 5, color = "white") + 
+  labs(title="Frequency and Percentage of Participants With and Without Heart Disease \n at Each Chest Pain Level", x="Chest Pain Levels", y="Frequency", fill="Target Variable")+
+  scale_fill_manual(values= c("No_Disease" = "blue", "Disease"= "red"), labels= c("Disease", "No Disease"))+
+  # facet_wrap(~target, scales = "free_y", labeller = labeller(target = 
+  #   c("0" = "No Disease",
+  #     "1" = "Disease")))+
+  theme(panel.background = element_blank())
+
+```
+
+
+
+
+
+
+
+
+```{r}
+mydata.clean %>% 
+
+  group_by(sex, target) %>% 
+
+  summarise(count = n()) %>% 
+
+  group_by(sex) %>% 
+
+  mutate(percentage = (count / sum(count)) * 100) %>%
+
+ggplot(aes(x=sex, y=count, fill= factor(target))) +
+  geom_bar(stat = "identity")+
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), size = 5, color = "white") + 
+  labs(title="Frequency and Percentage of Participants With and Without Heart Disease for Males and Females", x="Gender", y="Frequency", fill="Target Variable")+
+  scale_fill_manual(values= c("No_Disease" = "blue", "Disease"= "red"), labels= c("Disease", "No Disease"))+
+  theme(panel.background = element_blank())
+
+
+
+# mydata.clean %>% 
+
+  # group_by(sex, target) %>% 
+  # 
+  # summarise(count = n()) 
+```
+
+
+
+
+
+```{r}
+mydata.clean %>% 
+
+  group_by(exercise_induced_angina, target) %>% 
+
+  summarise(count = n()) %>% 
+
+  group_by(exercise_induced_angina) %>% 
+
+  mutate(percentage = (count / sum(count)) * 100) %>%
+
+ggplot(aes(x=exercise_induced_angina, y=count, fill= factor(target))) +
+  geom_bar(stat = "identity")+
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), size = 5, color = "white") + 
+  labs(title="Frequency and Percentage of Participants With and Without Heart Disease \n That Have and Don't Have Exercised Induced Angina", x="Exercised-Induced Angina", y="Frequency", fill="Target Variable")+
+  scale_fill_manual(values= c("No_Disease" = "blue", "Disease"= "red"), labels= c("Disease", "No Disease"))+
+  theme(panel.background = element_blank())
+```
+
+
+
+
+
+
+```{r}
+ggplot(mydata.clean, aes(x=resting_blood_pressure, fill=factor(target))) +
+geom_histogram(bindwith = 4, position = "dodge", color = "black")+
+  xlim(0, 230)+
+  ylim(0,125)+
+labs(title="Distribution of Resting Blood Pressure of Participants \n With and Without Heart Disease", x="Blood Pressure", y="Frequency", fill="Target Variable") +
+scale_fill_manual(values =c("No_Disease" = "blue", "Disease" = "red"), labels= c("Disease", "No Disease"))+
+facet_wrap(~target, scales = "free_y", labeller = labeller(target = 
+    c("No Disease" = "No Disease",
+      "Disease" = "Disease")))+
+  theme(panel.background = element_blank())
+```
+
+
+
+```{r}
+ggplot(mydata.clean, aes(x=chol, fill=factor(target))) +
+geom_histogram(bindwith = 4, position = "dodge", color = "black")+
+  xlim(0,600)+
+labs(title="Distribution of Cholesterol of Participants \n With and Without Heart Disease", x="Cholesterol", y="Frequency", fill="Target Variable") +
+scale_fill_manual(values =c("No_Disease" = "blue", "Disease" = "red"), labels= c("Disease", "No Disease"))+
+facet_wrap(~target, scales = "free_y", labeller = labeller(target = 
+    c("No Disease" = "No Disease",
+      "Disease" = "Disease")))+
+  theme(panel.background = element_blank())
+```
+
+
+
+
+
+
+
+```{r}
+ggplot(mydata.clean, aes(x=age, y=resting_blood_pressure, color=factor(target))) +
+  geom_point()+
+  xlim(0,90)+
+  ylim(0,210)+
+  #geom_bar()+
+#geom_histogram(bindwith = 4, position = "dodge", color = "black")+
+labs(title="Relationship Between Age and Resting Blood Pressure \n With and Without Heart Disease", x="Age", y="Resting Blood Pressure", color="Target Variable") +
+  scale_color_manual(values =c("No_Disease" = "blue", "Disease" = "red"), labels= c("Disease", "No Disease"))+
+#scale_fill_manual(values =c("0" = "blue", "1" = "red"), labels= c("No Disease", "Disease"))+
+facet_wrap(~target, scales = "free_y", labeller = labeller(target = 
+    c("No Disease" = "No Disease",
+      "Disease" = "Disease")))+
+  #scale_fill_manual(values =c("0" = "blue", "1" = "red"), labels= c("No Disease", "Disease"))+
+  theme(panel.background = element_blank())
+```
+
+
+
+
+```{r}
+ggplot(mydata.clean, aes(x=chol, y=resting_blood_pressure, color=factor(target))) +
+  geom_point()+
+  xlim(0,500)+
+  ylim(0,210)+
+  #expand_limits(x=0,y=0)+
+  #geom_bar()+
+#geom_histogram(bindwith = 4, position = "dodge", color = "black")+
+labs(title="Relationship Between Cholesterol and Resting Blood Pressure \n With and Without Heart Disease", x="Cholesterol", y="Resting Blood Pressure", color="Target Variable") +
+  scale_color_manual(values =c("No_Disease" = "blue", "Disease" = "red"), labels= c("Disease", "No Disease"))+
+#scale_fill_manual(values =c("0" = "blue", "1" = "red"), labels= c("No Disease", "Disease"))+
+facet_wrap(~target, scales = "free_y", labeller = labeller(target = 
+    c("No Disease" = "No Disease",
+      "Disease" = "Disease")))+
+  #scale_fill_manual(values =c("0" = "blue", "1" = "red"), labels= c("No Disease", "Disease"))+
+  theme(panel.background = element_blank())
+```
+
+
+
+
+
+
+
+
+
+
+
+
+## Correlation Matrix
+
+A correlation matrix plot is a visual representation of the pairwise correlation coefficients between variables in your dataset. The values in the matrix represent the correlation coefficient (often Pearson’s correlation) between two variables. 
+
+Interpret the Values:
+
+High Positive Correlation (e.g., 0.8 or 0.9): Strong positive linear relationship between the two variables. For example, age and cholesterol levels might have a high positive correlation.
+
+Moderate Correlation (e.g., 0.4 to 0.6): A moderate positive relationship. These variables are related, but not perfectly.
+
+Low or No Correlation (e.g., 0.1 to 0.3 or close to 0): Weak or no linear relationship. These variables are not strongly associated.
+
+Negative Correlation (e.g., -0.3 to -0.9): A negative relationship, where an increase in one variable corresponds to a decrease in the other.
+
+```{r vif_model, warning=FALSE, message=FALSE}
+cor_matrix <- cor(mydata.clean %>% select_if(where(is.numeric)), use = "complete.obs")
+
+cor_long <- melt(cor_matrix)
+cor_long <- cor_long[as.numeric(cor_long$Var1) > as.numeric(cor_long$Var2), ]
+
+
+ggplot(cor_long, aes(Var2, Var1, fill = value)) +
+  geom_tile(color = "white") +
+  geom_text(aes(label = ifelse(value != 0, round(value, 2), "")), 
+            color = "black", size = 3, face="bold") +  # Show only significant values
+  scale_fill_gradient2(low = "pink", high = "blue", mid = "white", 
+                       midpoint = 0, limit = c(-1, 1), 
+                       space = "Lab", name = "Correlation") +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, size = 10),  # Adjust x-axis label
+    axis.text.y = element_text(size = 10),                                   # Adjust y-axis label
+    axis.title = element_blank(),                                            # Remove axis titles
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 14)          # Center plot title
+  ) +
+  ggtitle("Correlation Matrix")
+```
+
+
+### Data Balance 
+
+1. Target is fairly balanced (Almost 50-50% with no disease/disease)
+2. Each level of categorical variables are represented by lots of patients
+3. We can conclude the data is not imbalanced
+
+```{r}
+
+summary_data <- mydata.clean %>%
+  group_by(target) %>%
+  summarise(sum_count = n()) %>%
+  mutate(percentage = (sum_count / sum(sum_count)) * 100)
+
+
+ggplot(summary_data, aes(x = target, y = sum_count, fill = target)) +
+  geom_bar(stat = "identity") +
+  geom_text(aes(label = paste0(round(percentage, 1), "%")), 
+            position = position_stack(vjust = 0.5), size = 5, color = "white") + 
+  labs(title = "Sum Count of Target with Percentages", 
+       x = "Target Value", 
+       y = "Sum Count") +
+  theme_minimal()
+```
+
+
+```{r}
+# 
+variables <- c("sex", "chest_pain", "fasting_blood_sugar", "restecg", "slope", "vessels_colored")
+plot_data <- lapply(variables, function(var) {
+  mydata.clean |> 
+    group_by(across(all_of(var)), target) |> 
+    summarise(count = n(), .groups = "drop") |> 
+    mutate(variable = var, level = get(var))
+}) %>%
+  bind_rows()
+
+# Create the faceted bar plot
+ggplot(plot_data, aes(x = level, y = count, fill = factor(target))) +
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_wrap(~variable, scales = "free_x") +
+  labs(
+    title = "Relationship between Target and Other Variables",
+    x = "Variable Levels",
+    y = "Count",
+    fill = "Target"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+```
+
+
+
+
+
+## Splitting the data
+
+```{r}
+# Partition data - train (80%) - test(20%)
+set.seed(1234)
+indexSet <-sample(2, nrow(mydata.clean), replace = T, prob = c(0.8, 0.2))
+train <- mydata.clean[indexSet==1,]
+test <- mydata.clean[indexSet==2,]
+```
+
+
+
+
+
+## Model 1 -  Logistic Regression
+
+```{r}
+set.seed(1234)
+logistic_full <- glm(target ~., data=train, family = "binomial")
+summary(logistic_full)
+
+```
+
+##  VIF Check
+
+VIF quantifies how much the variance of a regression coefficient is inflated due to multicollinearity with other predictors in the model. A high VIF indicates that a predictor is highly correlated with other predictors, meaning it might be redundant.
+
+Multicollinearity in logistic regression can cause inflated standard errors for the coefficients, making them unreliable. This can lead to problems with statistical significance testing and interpretation.
+High multicollinearity means that the model cannot determine the individual effect of correlated predictors, and you may end up with misleading results.
+
+Interpretation of VIF Values:
+VIF = 1: No correlation with other predictors (ideal).
+1 < VIF < 5: Moderate correlation; not a problem in most cases.
+VIF > 5 or 10: High correlation with other predictors; indicates potential multicollinearity issues. It suggests that you should consider removing or combining predictors.
+
+```{r}
+set.seed(1234)
+vif(logistic_full)
+```
+
+## Feature Selection - Improve the model with StepAIC
+
+AIC (Akaike Information Criterion) or BIC (Bayesian Information Criterion) are generally better choices than Pseudo's R-squared.
+
+AIC vs. BIC
+AIC (Akaike Information Criterion):
+
+Focuses on finding the model that best balances goodness-of-fit and complexity.
+It penalizes the inclusion of extra predictors, but less strictly than BIC.
+Use AIC if prediction accuracy is the primary goal, as it tends to favor slightly more complex models.
+
+BIC (Bayesian Information Criterion):
+
+Similar to AIC but applies a stronger penalty for model complexity, especially with larger sample sizes.
+Use BIC if the focus is on selecting a parsimonious model (simpler with fewer predictors) or if your dataset is large.
+
+We use AIC because our goal is prediction and we have more variables in this model. Step AIC function suggests us remove two variables: fbs, restecg.(which gives us the lowest AIC score after removing them)
+
+```{r}
+set.seed(1234)
+logistic_2 <- stepAIC(logistic_full)
+summary(logistic_2)
+```
+
+# Logistic Regression Coefficient (logit Model)
+- The coefficient differ by a scale factor and therefore we cannot interpret the magnitude of the coefficients
+- coefficient interpretation: 
+
+    Individual who are male, higher resting blood pressure, higher cholesterol, resting electrocardiographic results level 2, higher exercise induced angina, higher old peak, the slope of the peak exercise level 1, major vessels (0-3) colored by flourosopy level 1, 2, 3 are more likely to have heart disease.
+    
+- Odds Ratio higher than one would mean that the outcome of patients having heart disease,
+```{r}
+# Odds Ratios
+set.seed(1234)
+exp(logistic_2$coefficients)
+```
+
+# Marginal Effect 
+
+The marginal effect refers to the change in the probability of the outcome (i.e., the dependent variable) associated with a one-unit change in a predictor variable, holding all other variables constant. Since logistic regression models the log-odds of the outcome, the marginal effect is a way to interpret the effect of a predictor variable in terms of actual probabilities, which is more intuitive.
+
+Marginal effects interpretation:
+
+For individual who are male: 17.27% more likely to have heart disease
+For each unit increase in resting blood pressure: 0.225% more likely to have heart disease. 
+For chest pain type 1: 10% more likely to have heart disease
+For chest pain type 2: 19.58% less likely to have heart disease
+For chest pain type 2: 21.21% less likely to have heart disease
+
+```{r}
+# Logit model average marginal effects
+set.seed(1234)
+LogitScalar <- mean(dlogis(predict(logistic_2, type="link")))
+avg_m_effects <- LogitScalar*coef(logistic_2)
+avg_m_effects
+```
+# McFadden's Pseudo R-squared
+
+Pseudo R-squared is a measure of model fit in logistic regression, similar to R-squared in linear regression, but it doesn't represent the proportion of variance explained. Instead, it quantifies how well the model explains the data compared to a null model (a model with no predictors). 
+
+McFadden's R-squared: Based on the log-likelihood ratio between the fitted model and the null model. Values closer to 1 indicate better fit.
+
+The value implies that our model explains approximately 57.45% of the variation in the outcome variable compared to the null model. Values between 0.2 and 0.4 are often considered acceptable in practice, so a value of 0.59 suggests a very strong model fit.
+
+Soure: "https://kapooramanpreet.github.io/documents/research/papers/Wolf,Kapoor,Hobson&Gardner-McCune_SIGCSE2023_Internships_Paper.pdf" 
+McFadden, D. 1977. Quantitative Methods for Analyzing Travel Behaviour of Individuals: Some Recent Developments.
+
+```{r}
+set.seed(1234)
+pseudo_r2 <- pR2(logistic_2)
+pseudo_r2
+```
+
+# Predicting test data set and Accuracy.
+
+1. We use K-fold cross validation 
+
+"In K-fold cross-validation, the data set is divided into a number of K-folds and used to assess the model's ability as new data become available. K represents the number of groups into which the data sample is divided. For example, if you find the k value to be 5, you can call it 5-fold cross-validation."
+
+2. Here we use 10 fold
+3. Around 824 samples are used in training set and remaining 103 samples are used as test set. 
+4. Around 87% accuracy
+
+```{r}
+# Assess model using Cross Validation
+set.seed(1234)
+crossValSettings <- trainControl(method = "repeatedcv", number = 10, savePredictions = TRUE)
+
+crossVal <- train(target ~ age + sex + chest_pain + resting_blood_pressure + chol + max_heart_rate + 
+    exercise_induced_angina + oldpeak + slope + vessels_colored + thal, data=train, family = "binomial", method = "glm", trControl = crossValSettings)
+
+crossVal
+
+pred <- predict(crossVal, newdata = test)
+confusionMatrix(data = pred, test$target)
+
+```
+
+
+
+
+## Model 2 - Random Forest 
+
+1. A very low OOB (Out-of-bag) value suggest overfitting:
+2. Reducing the complexity of the random forest model by decreasing the number of trees, limiting the maximum depth of trees, or removing features.
+
+```{r}
+set.seed(1234)
+rf <- randomForest(target ~ ., data=train, proximity=TRUE, importance =TRUE, do.trace = 10, ntree = 50)
+rf
+```
+1. Error rate become relatively flat after 5 trees
+
+```{r}
+# Plot the error rate to see what is the suitable number of trees.
+set.seed(1234)
+oob.error.data <- data.frame(
+  Trees=rep(1:nrow(rf$err.rate), times=3),
+  Type=rep(c("OOB", "Disease", "No_Disease"), each=nrow(rf$err.rate)),
+  Error=c(rf$err.rate[,"OOB"], 
+    rf$err.rate[,"Disease"], 
+    rf$err.rate[,"No_Disease"]))
+
+ggplot(data=oob.error.data, aes(x=Trees, y=Error)) +
+  geom_line(aes(color=Type))
+
+```
+
+1. Here we select 5 as number of tree
+2. OOB is around 5% means 95% samples were correctly classified by the random forest
+
+```{r}
+set.seed(1234)
+rf2 <- randomForest(target ~ ., data=train, proximity=TRUE, importance =TRUE, ntree = 5)
+rf2
+```
+
+# Feature Selection:
+
+The function varImpPlot() in Random Forest regression (and classification) is used to visualize the importance of each predictor (independent variable) in the model. It helps to understand which features contribute most to the model’s predictions. This is particularly useful when you have many predictor variables and want to identify which ones are most influential.
+
+Purpose of varImpPlot() in Random Forest Regression:
+Feature Importance: varImpPlot() plots the importance of each variable in the model, allowing you to assess which variables have the greatest effect on the target variable.
+
+Model Interpretation: By visualizing feature importance, you can identify key predictors and gain insights into your data and model. This helps in understanding the model’s behavior and making decisions about which features to retain, remove, or transform.
+
+Dimensionality Reduction: If certain variables have very low importance, you might decide to drop them from the model to reduce complexity, improve interpretability, and potentially improve model performance.
+
+Here we removed fbs, restecg, slope variables as they are less important.
+
+```{r}
+#Variable Importance - which variables can we remove?
+set.seed(1234)
+varImpPlot(rf2)
+```
+
+# Final model and accessing classification accuracy
+
+```{r}
+set.seed(1234)
+rf3 <- randomForest(target ~ age + sex + chest_pain + resting_blood_pressure + chol + max_heart_rate + 
+    exercise_induced_angina + oldpeak + vessels_colored + thal, data=train, proximity=TRUE, importance =TRUE, ntree = 5)
+rf3
+
+```
+
+```{r}
+set.seed(1234)
+result <- data.frame(test$target, predict(rf3, test[, 0:13], type="response"))
+head(result)
+```
+
+```{r}
+set.seed(1234)
+confusionMatrix(result$predict.rf3..test...0.13...type....response.., result$test.target)
+```
+
+
+## Which model can better classify?  -ROC Curve and AUC
+
+To determine which model performs better we use AUC-ROC Curve:
+
+AUC-ROC evaluates the ability of a model to distinguish between classes across various thresholds. A higher AUC indicates better discrimination ability.The model with the higher AUC is generally better.
+
+Random Forest Model has higher AUC and below ROC Curve suggest Random Forest Model is better.
+
+```{r}
+set.seed(1234)
+par(pty="s")
+roc(train$target, logistic_2$fitted.values, plot=TRUE, legacy.axes=TRUE, percent=TRUE,
+    xlab="False Positive Percentage", ylab="True Positive Percentage", col="#0ABAB5",  print.auc=TRUE)
+plot.roc(train$target, rf3$votes[,1], percent=TRUE, col="#FA8072", print.auc=TRUE, add=TRUE, print.auc.y=40)
+legend("bottomright", legend=c("Logistic Regression", "Random Forest"), col=c("#0ABAB5","#FA8072"), lwd=2)
+
+```
+
+
+
+
+
+
