@@ -1,0 +1,228 @@
+---
+title: "Project 1"
+author: "CHUN SHING LEUNG"
+date: "2023-09-23"
+output: html_document
+---
+
+In this project, you’re given a text file with chess tournament results where the information has some structure. Your job is to create an R Markdown file that generates a .CSV file (that could for example be imported into a SQL database) with the following information for all of the players:
+
+Player’s Name, 
+Player’s State, 
+Total Number of Points, 
+Player’s Pre-Rating, 
+Average Pre Chess Rating of Opponents
+
+
+## Loading the Text File
+
+```{r warning=FALSE, message=FALSE}
+library(stringr)
+library(readr)
+library(dplyr)
+
+
+theUrl <- 'https://raw.githubusercontent.com/tonyCUNY/tonyCUNY/main/tournamentinfo.txt'
+
+# Reading the data again but skip the first 4 lines
+
+df2 <- read.table(file=theUrl, skip = 4, sep=",")
+
+```
+
+## Reading the data. 
+
+```{r}
+# Inspect the data structure.
+
+head(df2)
+
+```
+
+## Extracting the data part 1.
+
+Here are the steps I use to extract the information for just 1 player- GARY HUA:
+
+1. The first 4 lines are not needed. They are removed.
+
+2. Use strsplit to split elements according to matches "|" and space (\\s*) around it.
+
+   Results are stored in sub_n1, sub_n2.
+   
+3. Transform sub_n1, sub_n2 as data.frame so each elements are stored in different rows.
+
+4. Id, Name, State, Number of Points, Pre-Rating can be accessed individually from specific row
+
+5. Use str_extract and regex to extract the information we need. 
+
+```{r}
+# split elements according to matches "|" and space (\\s*) around it
+sub_n1 <- strsplit(df2[1, ], "\\s*\\|\\s*")
+sub_n2 <- strsplit(df2[2, ], "\\s*\\|\\s*")
+sub_n1
+sub_n2
+
+# Transform sub_n1, sub_n2 as data.frame
+sub_n1_df <- as.data.frame(sub_n1)
+sub_n2_df <- as.data.frame(sub_n2)
+
+# Access Id, Name, State, Number of Points, Pre-Rating
+# Player's ID - It will be used when calcuating the Average Pre Chess Rating
+str_extract(sub_n1_df[1,], "\\d+")
+# Player’s Name
+sub_n1_df[2,]
+# Player’s State
+str_extract(sub_n2_df[1, ], "\\b[A-Z]+\\b")
+# Total Number of Points
+sub_n1_df[3,]
+# Player’s Pre-Rating
+str_extract(sub_n2_df[2,], "(?<=R: )\\d+")
+# Opponents ID 1 - 7
+str_extract(sub_n1_df[4,], "\\d+")
+str_extract(sub_n1_df[5,], "\\d+")
+str_extract(sub_n1_df[6,], "\\d+")
+str_extract(sub_n1_df[7,], "\\d+")
+str_extract(sub_n1_df[8,], "\\d+")
+str_extract(sub_n1_df[9,], "\\d+")
+str_extract(sub_n1_df[10,], "\\d+")
+
+
+```
+
+## Extracting the data part 2.
+
+Now we need to use a loop to repeat part 1 to extract information from all players.
+
+Create a simple for loop to extract elements in a list and combine them into a new vector
+
+test <- c()
+
+for (i in 1:length(test_list)) {
+
+  test <- c(test, test_list[[i]])
+  
+}
+
+Expand this loop to include all the vectors we need.
+
+Function Seq() will tell the for loop which row to access.
+
+item 1. Row contains ID, Name, Number of Points, Opponents ID repeat every 3 lines
+
+item 2. Row contains State, Pre-Rating repeat every 3 lines
+
+```{r}
+# Use loop to repeat part 1 and complete item 1
+
+id = c()
+name = c()
+total_num_points = c()
+o1 = c()
+o2 = c()
+o3 = c()
+o4 = c()
+o5 = c()
+o6 = c()
+o7 = c()
+
+for (i in seq(1, nrow(df2), by = 3)) {
+  sub = as.data.frame(strsplit(df2[i, ], "\\s*\\|\\s*"))
+  id = c(id, as.numeric(str_extract(sub[1,], "\\d+")))
+  name = c(name, sub[2,])
+  total_num_points = c(total_num_points, sub[3,])
+  o1 = c(o1, as.numeric(str_extract(sub[4,], "\\d+")))
+  o2 = c(o2, as.numeric(str_extract(sub[5,], "\\d+")))
+  o3 = c(o3, as.numeric(str_extract(sub[6,], "\\d+")))
+  o4 = c(o4, as.numeric(str_extract(sub[7,], "\\d+")))
+  o5 = c(o5, as.numeric(str_extract(sub[8,], "\\d+")))
+  o6 = c(o6, as.numeric(str_extract(sub[9,], "\\d+")))
+  o7 = c(o7, as.numeric(str_extract(sub[10,], "\\d+")))
+}
+
+# Use loop to repeat part 1 and complete item 2
+
+state = c()
+pre_rating = c()
+
+for (i in seq(2, nrow(df2), by = 3)) {
+  sub = as.data.frame(strsplit(df2[i, ], "\\s*\\|\\s*"))
+  state = c(state, str_extract(sub[1, ], "\\b[A-Z]+\\b"))
+  pre_rating = c(pre_rating, as.numeric(str_extract(sub[2,], "(?<=R: )\\d+")))
+  
+}
+
+
+```
+
+## Combine all the vectors into the a dataframe
+
+```{r}
+
+table = data.frame(id, state, name, total_num_points, pre_rating, o1, o2, o3, o4, o5, o6, o7 )
+
+head(table)
+
+```
+
+## Find out Average Pre Chess Rating of Opponents
+
+Now we need to calculate Average Pre Chess Rating of Opponents and create a new column Avg_Chess_Rate 
+
+The values of o1, 2, 3, 4, 5, 6, 7 are referring to values of ID
+
+They are used to call out the pre_rating value corresponding to the matched ID:
+
+For example, table\$pre_rating[table$id[table[1, 6]] = 39 
+
+!is.na is used to filter out NA value during the loop.
+
+The count2 column under total4 is to get us correct denominator value.Because some players play less then 7
+
+games.
+
+```{r}
+
+col_index <- c(6, 7, 8, 9, 10, 11, 12)
+total4 <- data.frame(total1 = rep(0, 64),
+                     count2 = rep(0, 64))
+
+
+for (i in 1:64) {
+  for (j in col_index) {
+    if (!is.na(table$pre_rating[table$id[table[i, j]]])) {
+      total4[i, 1] <- total4[i, 1] + table$pre_rating[table$id[table[i, j]]]
+    }
+    if (is.na(table[i, j])) {
+      total4[i, 2] <- total4[i, 2] + 1
+    }
+  }
+}
+
+
+Avg_Chess_Rate <- c()
+
+for (i in 1:64) {
+  Avg_Chess_Rate[i] <- total4[i, 1] / (7 - total4[i, 2])
+}
+
+result_avg = as.data.frame(Avg_Chess_Rate)
+head(result_avg)
+
+
+```
+
+## Built the final table and export it CSV file.
+
+
+
+```{r}
+
+final_table <- cbind(table, result_avg)
+head(final_table)
+final_table2 <- data.frame(final_table$name, final_table$state, final_table$pre_rating, final_table$Avg_Chess_Rate)
+head(final_table2)
+
+write.csv(final_table, "C:\\Users\\tonyl\\Desktop\\CUNY\\final_table.csv", row.names = FALSE)
+write.csv(final_table2, "C:\\Users\\tonyl\\Desktop\\CUNY\\final_table2.csv", row.names = FALSE)
+```
+
